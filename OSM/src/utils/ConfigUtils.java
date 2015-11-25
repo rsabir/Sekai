@@ -1,5 +1,6 @@
 package utils;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 import org.json.simple.JSONArray;
@@ -8,6 +9,14 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 public class ConfigUtils {
+	
+	public static String getConfig(String url) throws ParseException, IOException{	
+		String response = HttpSendRequest.sendGET(url);
+		return response;
+		
+		// TestConfigUtils.before();
+		// return TestConfigUtils.jsonString;
+	}
 	
 	public static ArrayList<ArrayList<Object>> parse(String configJson){
 		JSONParser parser = new JSONParser();
@@ -33,12 +42,12 @@ public class ConfigUtils {
 		}
 	}
 	
-	public static ArrayList<String> findResponsibleServer(int[]gps,ArrayList<ArrayList<Object>> config){
+	public static ArrayList<String> findResponsibleServer(float[]gps,ArrayList<ArrayList<Object>> config){
 		ArrayList<String> result = new ArrayList<String>();
 		for (int i=0; i<config.size(); i++){
 			ArrayList<Object> tmp = config.get(i);
-			if (gps[0]>Integer.parseInt(tmp.get(0).toString()) || gps[0]<Integer.parseInt(tmp.get(1).toString())  || 
-					gps[1]>Integer.parseInt(tmp.get(2).toString())  || gps[1]<Integer.parseInt(tmp.get(3).toString()) )
+			if (gps[0]>Float.parseFloat(tmp.get(0).toString()) || gps[0]<Float.parseFloat(tmp.get(1).toString())  || 
+					gps[1]>Float.parseFloat(tmp.get(2).toString())  || gps[1]<Float.parseFloat(tmp.get(3).toString()) )
 				continue;
 			result.add(tmp.get(4).toString());
 		}

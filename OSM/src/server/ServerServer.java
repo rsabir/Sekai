@@ -4,13 +4,14 @@ import java.util.ArrayList;
 
 import org.json.simple.JSONObject;
 
+import constants.Urls;
 import utils.HttpSendRequest;
 
 public class ServerServer {
 	public static int notifyAdd(final JSONObject payload, ArrayList<String> servers){
 		int compteur=0;
 		for(final String server : servers){
-			if (server.equals(ServerConstants.IP)){
+			if (server.equals(Urls.IP)){
 				continue;
 			}
 			Thread t = new Thread(new Runnable(){

@@ -14,10 +14,11 @@ import utils.ConfigUtils;
 
 public class TestServerServer {
 
-	String payload;
-	int[] gps;
-	@Before
-	public void before(){
+	public static String payload;
+	static float[] gps;
+	
+	
+	public static void before(){
 		TestServerClient.before();
 		payload = "{ \"client\":"+
 		  "{\"ID\" : \"value\","+
@@ -27,10 +28,16 @@ public class TestServerServer {
 		  "}"+
 		 "\"isServer\" : true"+
 		"}";
-		gps = new int[2];
+		gps = new float[2];
 		gps[0]=26;gps[1]=22;
 		
 	}
+	
+	@Before
+	public void beforeTest(){
+		before();
+	}
+	
 	@Test
 	public void testNotifyAdd() {
 		ArrayList <String> servers = ConfigUtils.findResponsibleServer(

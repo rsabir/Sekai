@@ -3,6 +3,7 @@ package server;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import constants.Urls;
 import utils.HttpSendRequest;
 
 public class ServerClient{
@@ -18,7 +19,7 @@ public class ServerClient{
 	
 	public static boolean isInCharge(ArrayList<String>serversInCharge){
 		for (int i=0;i<serversInCharge.size();i++)
-			if (serversInCharge.get(i).equals(ServerConstants.IP))
+			if (serversInCharge.get(i).equals(Urls.IP))
 				return true;
 		return false;
 	}

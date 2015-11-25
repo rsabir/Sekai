@@ -6,30 +6,31 @@ import org.json.simple.parser.ParseException;
 
 public class PayloadUtils {
 	private boolean isServer;
-	private int lon;
-	private int lat;
-	private int[] gps;
+	private float lon;
+	private float lat;
+	private float[] gps;
 	private String id;
-	PayloadUtils(String jsonString) throws ParseException{
+	public PayloadUtils(String jsonString) throws ParseException{
 		JSONParser jsonParser = new JSONParser();
 		JSONObject payloadJSON =(JSONObject)jsonParser.parse(jsonString);
 		id = (String) ((JSONObject)payloadJSON.get("client")).get("ID");
 		JSONObject poisitionJSON = (JSONObject) ((JSONObject)payloadJSON.get("client")).get("Position");
-		lat = (int) poisitionJSON.get("lat");
-		lon = (int) poisitionJSON.get("lon");
-		gps = new int[2];
+		lat = Float.parseFloat(String.valueOf(poisitionJSON.get("lat")));
+		lon = Float.parseFloat(String.valueOf(poisitionJSON.get("lon")));
+		isServer = (boolean) payloadJSON.get("isServer");
+		gps = new float[2];
 		gps[0]=lat;gps[1]=lon;
 	}
-	public int[] getGps() {
+	public float[] getGps() {
 		return gps;
 	}
 	public boolean isServer() {
 		return isServer;
 	}
-	public int getLon() {
+	public float getLon() {
 		return lon;
 	}
-	public int getLat() {
+	public float getLat() {
 		return lat;
 	}
 	public String getId() {

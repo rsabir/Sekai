@@ -12,6 +12,11 @@ public class TestConfigUtils {
 	static String jsonString;
 	@Before
 	public void beforeTests(){
+		before();
+	}
+	
+	
+	public static void before(){
 		jsonString =  "{\"servers\":["+
 	             "{"+
 	                "\"zone\":{"+
@@ -60,7 +65,7 @@ public class TestConfigUtils {
 	@Test
 	public void testFindResponsibleServer(){
 		ArrayList<ArrayList<Object>> result = ConfigUtils.parse(jsonString);
-		int[] gps = {1,21};
+		float[] gps = {1,21};
 		assert(ConfigUtils.findResponsibleServer(gps, result).size()==1);
 		assert(ConfigUtils.findResponsibleServer(gps, result).get(0).equals("1.2.3.4"));
 		gps[1] = 1;

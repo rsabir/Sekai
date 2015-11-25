@@ -8,15 +8,15 @@ import java.util.ArrayList;
 import org.junit.Before;
 import org.junit.Test;
 
+import constants.Urls;
 import utils.ConfigUtils;
 
 public class TestServerClient {
 
 	public static String jsonString;
-	
-	@Before 
+	 
 	public static void before(){
-		ServerConstants.IP="1.2.3.4";
+		Urls.IP="1.2.3.4";
 		jsonString =  "{\"servers\":["+
 	             "{"+
 	                "\"zone\":{"+
@@ -44,6 +44,12 @@ public class TestServerClient {
 	                "\"host\":\"1.2.3.6\""+
 	             "}]}";
 	}
+	
+	@Before
+	public void beforeTest(){
+		before();
+	}
+	
 	@Test
 	public void testgetZoneInfo() {
 		ServerClient.adressConfig = "http://10.161.61.0";
@@ -87,7 +93,7 @@ public class TestServerClient {
 	}
 	@Test
 	public void testIsInCharge(){
-		int[] gps = {25,25};
+		float[] gps = {25,25};
 		ArrayList <String> servers = ConfigUtils.findResponsibleServer(gps, ConfigUtils.parse(jsonString));
 		assert(ServerClient.isInCharge(servers)==true);
 		gps[0]=150;
