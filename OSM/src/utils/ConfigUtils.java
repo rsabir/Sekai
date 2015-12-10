@@ -17,7 +17,14 @@ public class ConfigUtils {
 		// TestConfigUtils.before();
 		// return TestConfigUtils.jsonString;
 	}
-	
+	/**
+	 * 
+	 * @param configJson le configuration en json mode string  
+	 * @return ArrayList composé ainsi :
+	 * [ [23,   22,   0.3,    0.1,  "192.169.1.2"] , [...] ]
+	 * 	   ^     ^     ^       ^             ^
+	 * 	maxLat minLat  maxLgn minLgn      IP
+ 	 */
 	public static ArrayList<ArrayList<Object>> parse(String configJson){
 		JSONParser parser = new JSONParser();
 		try {
@@ -41,7 +48,12 @@ public class ConfigUtils {
 			return null;
 		}
 	}
-	
+	/**
+	 * 
+	 * @param gps un tableau [lat,lgn] contenant les coordonnées du point
+	 * @param config l'ArrayList retourné par la fonction parse
+	 * @return ArrayList contenant tout les ip des serveurs reponsables du point
+	 */
 	public static ArrayList<String> findResponsibleServer(float[]gps,ArrayList<ArrayList<Object>> config){
 		ArrayList<String> result = new ArrayList<String>();
 		for (int i=0; i<config.size(); i++){

@@ -36,10 +36,10 @@ public class Config extends HttpServlet {
 		String jsonString =  "{\"servers\":["+
 	             "{"+
 	                "\"zone\":{"+
-	                       "\"maxlat\": 30,"+
-	                       "\"minlat\": 0,"+
-	                      " \"maxlon\": 40,"+
-	                       "\"minlon\": 20"+
+	                       "\"maxlat\": 40.772,"+
+	                       "\"minlat\": 40.712,"+
+	                      " \"maxlon\": -74.210,"+
+	                       "\"minlon\": -74.227"+
 	                "},"+
 	                "\"host\":\"1.2.3.4\""+
 	             "},{"+

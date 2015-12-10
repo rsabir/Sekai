@@ -18,6 +18,7 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 import constants.Urls;
+import server.Server;
 import server.ServerClient;
 import server.ServerServer;
 import utils.ConfigUtils;
@@ -73,6 +74,7 @@ public class SendGPS extends HttpServlet {
 			// String payloadString = request.getParameter(PAYLOADPARAMETER);
 			String configString = ConfigUtils.getConfig(Urls.CONFIGSERVER);
 			ArrayList<ArrayList<Object>> configList = ConfigUtils.parse(configString);
+			Server.refresh(configList);
 			// request.getAttribute(arg0)
 			PayloadUtils payload = new PayloadUtils(payloadString);
 			ArrayList<String> servers = ConfigUtils.findResponsibleServer(payload.getGps(), configList);
