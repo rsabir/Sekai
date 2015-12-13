@@ -48,6 +48,7 @@ public class GetMap extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException  {
+		/*
 		JSONObject jsonResponse = new JSONObject();
 		JSONParser jsonParser = new JSONParser();
 		request.setCharacterEncoding("utf8");
@@ -96,7 +97,7 @@ public class GetMap extends HttpServlet {
 		}
 		PrintWriter out = response.getWriter();
 		out.print(jsonResponse);
-		
+*/		
 	}
 
 }

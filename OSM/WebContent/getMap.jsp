@@ -31,8 +31,11 @@
 		 		-webkit-border-radius: 5px;
 				border-radius: 5px;
 		 	}
+		 	#search.extend{
+  				width:300px;
+  			}
 		 	#search{
-		 		width: 300px;
+		 		width: 200px;
 				background: white;
 				position: absolute;
 				left:5px;
@@ -40,6 +43,22 @@
 				height: 40px;
 				border: 1px solid #D9D9D9;
 		 	}
+		 	#search:hover{
+		 		width:300px;
+		 		-moz-animation-duration: 1s; 
+    			-webkit-animation-duration: 1s; /* Chrome, Safari, Opera */
+    			animation-duration: 1s;
+  				animation-name: slidein;
+			}
+			@keyframes slidein {
+			  from {
+			    width: 200px;
+			  }
+			  
+			  to {
+			    width: 300px;
+			  }
+			}
 		 	#mapContainer{
 		 		position:relative;
 		 	}
@@ -50,8 +69,10 @@
 				background:black;
 				color:white;
 				top:0;
-				width: 15%;
+				width: 13.5%;
 				cursor:pointer;
+				min-width: 39px;
+				z-index: 100;
 		 	}
 		 	.container_icon:hover{
 		 		opacity:0.85;
@@ -75,6 +96,14 @@
 				border: 0px none;
 				background: inherit;	
 		 	}
+		 	.leaflet-bottom.leaflet-right{
+		 		display:none;
+		 	}
+		 	#select{
+		 		position:absolute;
+		 		bottom:5px;
+		 		right:5px;
+		 	}
 		 </style>
 		<title>The Map</title>
 	</head>
@@ -91,8 +120,8 @@
 	var maxLgn = <% out.print(Server.getMaxLgn());%>
 	
 	var varGlobClient = [];
+	var optionSelected=0;	
 	var all=1;
-	
 	
 	var southWest = L.latLng(minLat,minLgn ),
     northEast = L.latLng(maxLat,maxLgn),
@@ -103,40 +132,73 @@
 	    zoom: 15,
 	    minZoom:13
 	});
+	map.fitBounds(bounds);
 	
 	L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6IjZjNmRjNzk3ZmE2MTcwOTEwMGY0MzU3YjUzOWFmNWZhIn0.Y8bhBaUMqFiPrDRW9hieoQ', {
 		maxZoom: 18,
 		id: 'mapbox.streets'
 	}).addTo(map);
 	var markers = [];
+	var listLatlgn = [];
+	var polyline;
 	function setMarkers(all,varGlobClient){
-		$.post("GetClients",{
-			all:all,
-			client:varGlobClient
-		},function(data){
-			for (var i =0 ; i< markers.length ; i++){
-				map.removeLayer(markers[i]);
-			}
-			markers = [];
-			if (data.code==0){
-				$.each(data.clients,function(index,client){
-					markers.push( L.marker([client.lat,client.lgn]).bindPopup(client.id).addTo(map) );
-				});					
-			}	
-		},"json").fail(function() {
-		    alert( "error" );
-		  });
-		
+		if (polyline!=undefined){
+			map.removeLayer(polyline);
+			polyline = undefined;
+		}
+		for (var i =0 ; i< markers.length ; i++){
+			map.removeLayer(markers[i]);
+		}
+		if (optionSelected==0){
+			$.post("GetClients",{
+				all:all,
+				client:varGlobClient
+			},function(data){
+				markers = [];
+				if (data.code==0){
+					$.each(data.clients,function(index,client){
+						markers.push( L.marker([client.lat,client.lgn]).bindPopup(client.id).addTo(map) );
+					});					
+					
+				}	
+			},"json").fail(function() {
+			    alert( "error" );
+			  });
+		}else{
+			$.post("GetHistory",{
+				optionSelected:optionSelected,
+				client : varGlobClient
+			},function(data){
+				
+				listLatlgn = [];
+				$.each(data.history,function(index,entry){
+					listLatlgn.push(L.latLng(entry.lat,entry.lgn));
+				});	
+				polyline = L.polyline(listLatlgn, {color: 'red'}).addTo(map);
+			},"json").fail(function() {
+			    alert( "error" );
+			  });
+		}
 		 
 	}
 	setMarkers(all,varGlobClient);
 	
 	$(document).ready(function(){
 		
-		$("#mapContainer").append('<div id="search">'+
+		$("#mapContainer").append('<div id="search" class="">'+
 		'<div class="container_icon"><i class="fa fa-search"></i></div>'+
 		'<input placeholder="Search for client" id="input_client"/>'+
 		'</div>');
+		$("#mapContainer").append(
+
+			    '<FORM id="select">'+
+			    '<SELECT name="nom" size="1">'+
+			    '<OPTION id="sans">sans trajet</option>'+
+			    "<OPTION id=\"ajd\" disabled>aujourd'hui</option>"+
+			    '<OPTION id="hier" disabled>hier</option>'+
+			    '</SELECT>'+
+			    '</FORM>');
+
 		var timer = setInterval(function(){
 			setMarkers(all,varGlobClient);
 		}, 10000);
@@ -149,7 +211,7 @@
 	        },
 	        minLength: 2,
 	        select: function(event, ui) {
-	       		all =0;
+	        	set_all(0);
 	       		varGlobClient = ui.item.value;
 	       		setMarkers(all,varGlobClient);
 	        },
@@ -162,16 +224,20 @@
 		    // optional (if other layers overlap autocomplete list)
 	        open: function(event, ui) {
 	            $(".ui-autocomplete").css("z-index", 1000);
+	            $("#search").addClass("extend");
+	        },
+	        close:function(event,ui){
+	        	 $("#search").removeClass("extend");
 	        }
 	    }).keypress(function(e) {
 	        if(e.which == 13) {
 	        	if ( $(e.target).val()=="" ){
-	        		all = 1;
+	        		set_all(1)
 	        	}else{
-		        	all = 0;
+	        		set_all(0)
 		       		varGlobClient = $(e.target).val();
 	        	}
-	       		setMarkers(all,varGlobClient);
+	        	setMarkers(all,varGlobClient);
 	        }
 	    });
 		
@@ -180,7 +246,40 @@
 			e.which = 13; // # Some key code value
 			$("#input_client").trigger(e);
 		});
+		
+		$( "#select" )
+		  .change(function() {
+		    var id = "";
+		    $( "select option:selected" ).each(function() {
+		      id = $( this )[0].id;
+			  switch(id){
+			  case "sans":
+				  optionSelected=0;	
+				  break;
+			  case "ajd":
+				  optionSelected=1;	
+				  break;
+			  case "hier":
+				  optionSelected=2;	
+				  break;
+			  }
+			  setMarkers(all,varGlobClient);
+		    });
+		  })
+		  .trigger( "change" );
+		
+		
 	});
+	
+	function set_all(activated){
+		if (activated==1){
+			all = 1;
+			$("option#ajd,option#hier").prop('disabled',true);
+		}else{
+			all=0;
+			$("option#ajd,option#hier").prop('disabled',false);
+		}
+	}
 
 // 	L.marker([51.5, -0.09]).addTo(map)
 // 		.bindPopup("<b>Hello world!</b><br />I am a popup.").openPopup();
