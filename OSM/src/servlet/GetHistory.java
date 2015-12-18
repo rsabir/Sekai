@@ -2,6 +2,7 @@ package servlet;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.io.Serializable;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.Map;
@@ -17,18 +18,22 @@ import org.json.simple.JSONValue;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
+import sqlite.controller.DBManager;
+
 /**
  * Servlet implementation class GetHistory
  */
 @WebServlet("/GetHistory")
 public class GetHistory extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+	 private DBManager dbManager= null;  
        
     /**
      * @see HttpServlet#HttpServlet()
      */
     public GetHistory() {
         super();
+        dbManager= new DBManager("server");
         // TODO Auto-generated constructor stub
     }
 
@@ -50,28 +55,30 @@ public class GetHistory extends HttpServlet {
 		response.setContentType("application/json");
 		String client = request.getParameter("client");
 		int optionChoosed = Integer.parseInt(request.getParameter("optionSelected"));
-		LinkedList<Map<String, Comparable>> clientList= new LinkedList<Map<String, Comparable>>();
+		LinkedList<Map<String, Comparable>> clientList= null;
 		if (optionChoosed==0){
 			// his position right now (is not used/never sent)
 		}else if (optionChoosed==1){
 			// his position of today
-			for (int i=0;i<100;i++){
+			clientList = new LinkedList<Map<String, Comparable>>(dbManager.getClientDataToday(client));
+			/*for (int i=0;i<100;i++){
 				LinkedHashMap<String, Comparable> client2 = new LinkedHashMap<String, Comparable>();
 				client2.put("lat",40.74173+i*0.001);
 				client2.put("lgn",-74.22569+i*0.001);
 				clientList.add(client2);
-			}
+			}*/
 		}else{
 			// his position of yesterday
-			for (int i=0;i<100;i++){
+			clientList = new LinkedList<Map<String, Comparable>>(dbManager.getClientDataYesterday(client));
+			/*for (int i=0;i<100;i++){
 			LinkedHashMap<String, Comparable> client2 = new LinkedHashMap<String, Comparable>();
 			client2.put("lat",40.74173+i*0.0001);
 			client2.put("lgn",-74.22569+i*0.0001);
 			clientList.add(client2);
-			}
+			}*/
 		}
 		//TODO get from the database the latlng of the day
-		Map obj=new LinkedHashMap();
+		Map<String, Serializable> obj=new LinkedHashMap<String, Serializable>();
 		obj.put("code",new Integer(0));
 		obj.put("history",clientList);
 		String jsonText = JSONValue.toJSONString(obj);			

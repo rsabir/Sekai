@@ -1,0 +1,80 @@
+déc. 15, 2015 11:49:26 PM org.apache.catalina.startup.VersionLoggerListener log
+INFOS: Server version:        Apache Tomcat/7.0.67
+déc. 15, 2015 11:49:26 PM org.apache.catalina.startup.VersionLoggerListener log
+INFOS: Server built:          Dec 7 2015 13:07:11 UTC
+déc. 15, 2015 11:49:26 PM org.apache.catalina.startup.VersionLoggerListener log
+INFOS: Server number:         7.0.67.0
+déc. 15, 2015 11:49:26 PM org.apache.catalina.startup.VersionLoggerListener log
+INFOS: OS Name:               Windows 8
+déc. 15, 2015 11:49:26 PM org.apache.catalina.startup.VersionLoggerListener log
+INFOS: OS Version:            6.2
+déc. 15, 2015 11:49:26 PM org.apache.catalina.startup.VersionLoggerListener log
+INFOS: Architecture:          amd64
+déc. 15, 2015 11:49:26 PM org.apache.catalina.startup.VersionLoggerListener log
+INFOS: Java Home:             C:\Program Files\Java\jre7
+déc. 15, 2015 11:49:26 PM org.apache.catalina.startup.VersionLoggerListener log
+INFOS: JVM Version:           1.7.0_79-b15
+déc. 15, 2015 11:49:26 PM org.apache.catalina.startup.VersionLoggerListener log
+INFOS: JVM Vendor:            Oracle Corporation
+déc. 15, 2015 11:49:26 PM org.apache.catalina.startup.VersionLoggerListener log
+INFOS: CATALINA_BASE:         C:\Program Files\Apache Software Foundation\Tomcat 7.0
+déc. 15, 2015 11:49:26 PM org.apache.catalina.startup.VersionLoggerListener log
+INFOS: CATALINA_HOME:         C:\Program Files\Apache Software Foundation\Tomcat 7.0
+déc. 15, 2015 11:49:26 PM org.apache.catalina.startup.VersionLoggerListener log
+INFOS: Command line argument: -Dcatalina.home=C:\Program Files\Apache Software Foundation\Tomcat 7.0
+déc. 15, 2015 11:49:26 PM org.apache.catalina.startup.VersionLoggerListener log
+INFOS: Command line argument: -Dcatalina.base=C:\Program Files\Apache Software Foundation\Tomcat 7.0
+déc. 15, 2015 11:49:26 PM org.apache.catalina.startup.VersionLoggerListener log
+INFOS: Command line argument: -Djava.endorsed.dirs=C:\Program Files\Apache Software Foundation\Tomcat 7.0\endorsed
+déc. 15, 2015 11:49:26 PM org.apache.catalina.startup.VersionLoggerListener log
+INFOS: Command line argument: -Djava.io.tmpdir=C:\Program Files\Apache Software Foundation\Tomcat 7.0\temp
+déc. 15, 2015 11:49:26 PM org.apache.catalina.startup.VersionLoggerListener log
+INFOS: Command line argument: -Djava.util.logging.manager=org.apache.juli.ClassLoaderLogManager
+déc. 15, 2015 11:49:26 PM org.apache.catalina.startup.VersionLoggerListener log
+INFOS: Command line argument: -Djava.util.logging.config.file=C:\Program Files\Apache Software Foundation\Tomcat 7.0\conf\logging.properties
+déc. 15, 2015 11:49:26 PM org.apache.catalina.startup.VersionLoggerListener log
+INFOS: Command line argument: exit
+déc. 15, 2015 11:49:26 PM org.apache.catalina.startup.VersionLoggerListener log
+INFOS: Command line argument: -Xms128m
+déc. 15, 2015 11:49:26 PM org.apache.catalina.startup.VersionLoggerListener log
+INFOS: Command line argument: -Xmx256m
+déc. 15, 2015 11:49:26 PM org.apache.catalina.core.AprLifecycleListener lifecycleEvent
+INFOS: The APR based Apache Tomcat Native library which allows optimal performance in production environments was not found on the java.library.path: C:\Program Files\Apache Software Foundation\Tomcat 7.0\bin;C:\Windows\Sun\Java\bin;C:\Windows\system32;C:\Windows;C:\ProgramData\Oracle\Java\javapath;C:\Program Files (x86)\Intel\iCLS Client\;C:\Program Files\Intel\iCLS Client\;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;C:\Program Files\Intel\Intel(R) Management Engine Components\DAL;C:\Program Files (x86)\Intel\Intel(R) Management Engine Components\DAL;C:\Program Files\Intel\Intel(R) Management Engine Components\IPT;C:\Program Files (x86)\Intel\Intel(R) Management Engine Components\IPT;C:\Program Files (x86)\Skype\Phone\;.
+déc. 15, 2015 11:49:26 PM org.apache.coyote.AbstractProtocol init
+INFOS: Initializing ProtocolHandler ["http-bio-8080"]
+déc. 15, 2015 11:49:26 PM org.apache.coyote.AbstractProtocol init
+INFOS: Initializing ProtocolHandler ["ajp-bio-8009"]
+déc. 15, 2015 11:49:26 PM org.apache.catalina.startup.Catalina load
+INFOS: Initialization processed in 620 ms
+déc. 15, 2015 11:49:26 PM org.apache.catalina.core.StandardService startInternal
+INFOS: Démarrage du service Catalina
+déc. 15, 2015 11:49:26 PM org.apache.catalina.core.StandardEngine startInternal
+INFOS: Starting Servlet Engine: Apache Tomcat/7.0.67
+déc. 15, 2015 11:49:26 PM org.apache.catalina.startup.HostConfig deployDirectory
+INFOS: Déploiement du répertoire C:\Program Files\Apache Software Foundation\Tomcat 7.0\webapps\docs de l'application web
+déc. 15, 2015 11:49:26 PM org.apache.catalina.startup.HostConfig deployDirectory
+INFOS: Deployment of web application directory C:\Program Files\Apache Software Foundation\Tomcat 7.0\webapps\docs has finished in 469 ms
+déc. 15, 2015 11:49:26 PM org.apache.catalina.startup.HostConfig deployDirectory
+INFOS: Déploiement du répertoire C:\Program Files\Apache Software Foundation\Tomcat 7.0\webapps\manager de l'application web
+déc. 15, 2015 11:49:26 PM org.apache.catalina.startup.HostConfig deployDirectory
+INFOS: Deployment of web application directory C:\Program Files\Apache Software Foundation\Tomcat 7.0\webapps\manager has finished in 78 ms
+déc. 15, 2015 11:49:26 PM org.apache.catalina.startup.HostConfig deployDirectory
+INFOS: Déploiement du répertoire C:\Program Files\Apache Software Foundation\Tomcat 7.0\webapps\ROOT de l'application web
+déc. 15, 2015 11:49:26 PM org.apache.catalina.startup.HostConfig deployDirectory
+INFOS: Deployment of web application directory C:\Program Files\Apache Software Foundation\Tomcat 7.0\webapps\ROOT has finished in 63 ms
+déc. 15, 2015 11:49:26 PM org.apache.coyote.AbstractProtocol start
+INFOS: Starting ProtocolHandler ["http-bio-8080"]
+déc. 15, 2015 11:49:26 PM org.apache.coyote.AbstractProtocol start
+INFOS: Starting ProtocolHandler ["ajp-bio-8009"]
+déc. 15, 2015 11:49:26 PM org.apache.catalina.startup.Catalina start
+INFOS: Server startup in 696 ms
+déc. 15, 2015 11:50:01 PM org.apache.coyote.AbstractProtocol pause
+INFOS: Pausing ProtocolHandler ["http-bio-8080"]
+déc. 15, 2015 11:50:01 PM org.apache.coyote.AbstractProtocol pause
+INFOS: Pausing ProtocolHandler ["ajp-bio-8009"]
+déc. 15, 2015 11:50:01 PM org.apache.catalina.core.StandardService stopInternal
+INFOS: Arrêt du service Catalina
+déc. 15, 2015 11:50:01 PM org.apache.coyote.AbstractProtocol stop
+INFOS: Stopping ProtocolHandler ["http-bio-8080"]
+déc. 15, 2015 11:50:01 PM org.apache.coyote.AbstractProtocol stop
+INFOS: Stopping ProtocolHandler ["ajp-bio-8009"]

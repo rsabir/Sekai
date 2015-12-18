@@ -13,11 +13,12 @@ public class PayloadUtils {
 	public PayloadUtils(String jsonString) throws ParseException{
 		JSONParser jsonParser = new JSONParser();
 		JSONObject payloadJSON =(JSONObject)jsonParser.parse(jsonString);
-		id = (String) ((JSONObject)payloadJSON.get("client")).get("ID");
+		id = ((JSONObject)payloadJSON.get("client")).get("ID").toString();
 		JSONObject poisitionJSON = (JSONObject) ((JSONObject)payloadJSON.get("client")).get("Position");
 		lat = Float.parseFloat(String.valueOf(poisitionJSON.get("lat")));
 		lon = Float.parseFloat(String.valueOf(poisitionJSON.get("lon")));
-		isServer = (boolean) payloadJSON.get("isServer");
+		//isServer = (boolean) payloadJSON.get("isServer");
+		isServer = Boolean.valueOf(payloadJSON.get("isServer").toString());
 		gps = new float[2];
 		gps[0]=lat;gps[1]=lon;
 	}

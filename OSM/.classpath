@@ -2,45 +2,47 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="test"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.7">
-		<attributes>
-			<attribute name="owner.project.facets" value="java"/>
-		</attributes>
-	</classpathentry>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.web.container"/>
 	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.module.container"/>
-	<classpathentry kind="lib" path="/root/Downloads/httpcomponents-client-4.5.1/lib/commons-codec-1.9.jar"/>
-	<classpathentry kind="lib" path="/root/Downloads/httpcomponents-client-4.5.1/lib/commons-logging-1.2.jar"/>
-	<classpathentry kind="lib" path="/root/Downloads/httpcomponents-client-4.5.1/lib/fluent-hc-4.5.1.jar"/>
-	<classpathentry kind="lib" path="/root/Downloads/httpcomponents-client-4.5.1/lib/httpclient-4.5.1.jar"/>
-	<classpathentry kind="lib" path="/root/Downloads/httpcomponents-client-4.5.1/lib/httpclient-cache-4.5.1.jar"/>
-	<classpathentry kind="lib" path="/root/Downloads/httpcomponents-client-4.5.1/lib/httpclient-win-4.5.1.jar"/>
-	<classpathentry kind="lib" path="/root/Downloads/httpcomponents-client-4.5.1/lib/httpcore-4.4.3.jar"/>
-	<classpathentry kind="lib" path="/root/Downloads/httpcomponents-client-4.5.1/lib/httpmime-4.5.1.jar"/>
-	<classpathentry kind="lib" path="/root/Downloads/httpcomponents-client-4.5.1/lib/jna-4.1.0.jar"/>
-	<classpathentry kind="lib" path="/root/Downloads/httpcomponents-client-4.5.1/lib/jna-platform-4.1.0.jar"/>
-	<classpathentry kind="lib" path="/root/Downloads/json-simple-1.1.1.jar"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
-	<classpathentry kind="lib" path="/root/Documents/project/projet OSM/Tomcat Installation/lib/annotations-api.jar"/>
-	<classpathentry kind="lib" path="/root/Documents/project/projet OSM/Tomcat Installation/lib/catalina.jar"/>
-	<classpathentry kind="lib" path="/root/Documents/project/projet OSM/Tomcat Installation/lib/catalina-ant.jar"/>
-	<classpathentry kind="lib" path="/root/Documents/project/projet OSM/Tomcat Installation/lib/catalina-ha.jar"/>
-	<classpathentry kind="lib" path="/root/Documents/project/projet OSM/Tomcat Installation/lib/catalina-tribes.jar"/>
-	<classpathentry kind="lib" path="/root/Documents/project/projet OSM/Tomcat Installation/lib/ecj-4.2.2.jar"/>
-	<classpathentry kind="lib" path="/root/Documents/project/projet OSM/Tomcat Installation/lib/el-api.jar"/>
-	<classpathentry kind="lib" path="/root/Documents/project/projet OSM/Tomcat Installation/lib/jasper.jar"/>
-	<classpathentry kind="lib" path="/root/Documents/project/projet OSM/Tomcat Installation/lib/jasper-el.jar"/>
-	<classpathentry kind="lib" path="/root/Documents/project/projet OSM/Tomcat Installation/lib/jsp-api.jar"/>
-	<classpathentry kind="lib" path="/root/Documents/project/projet OSM/Tomcat Installation/lib/servlet-api.jar"/>
-	<classpathentry kind="lib" path="/root/Documents/project/projet OSM/Tomcat Installation/lib/tomcat7-websocket.jar"/>
-	<classpathentry kind="lib" path="/root/Documents/project/projet OSM/Tomcat Installation/lib/tomcat-api.jar"/>
-	<classpathentry kind="lib" path="/root/Documents/project/projet OSM/Tomcat Installation/lib/tomcat-coyote.jar"/>
-	<classpathentry kind="lib" path="/root/Documents/project/projet OSM/Tomcat Installation/lib/tomcat-dbcp.jar"/>
-	<classpathentry kind="lib" path="/root/Documents/project/projet OSM/Tomcat Installation/lib/tomcat-i18n-es.jar"/>
-	<classpathentry kind="lib" path="/root/Documents/project/projet OSM/Tomcat Installation/lib/tomcat-i18n-fr.jar"/>
-	<classpathentry kind="lib" path="/root/Documents/project/projet OSM/Tomcat Installation/lib/tomcat-i18n-ja.jar"/>
-	<classpathentry kind="lib" path="/root/Documents/project/projet OSM/Tomcat Installation/lib/tomcat-jdbc.jar"/>
-	<classpathentry kind="lib" path="/root/Documents/project/projet OSM/Tomcat Installation/lib/tomcat-util.jar"/>
-	<classpathentry kind="lib" path="/root/Documents/project/projet OSM/Tomcat Installation/lib/websocket-api.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4">
+		<attributes>
+			<attribute name="org.eclipse.jst.component.dependency" value="/WEB-INF/lib"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/annotations-api.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/catalina-ant.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/catalina-ha.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/catalina-tribes.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/catalina.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/commons-codec-1.9.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/commons-logging-1.2.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/ecj-4.2.2.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/el-api.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/fluent-hc-4.5.1.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/httpclient-4.5.1.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/httpclient-cache-4.5.1.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/httpclient-win-4.5.1.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/httpcore-4.4.3.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/httpmime-4.5.1.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/jasper-el.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/jasper.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/jna-4.1.0.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/jna-platform-4.1.0.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/json-simple-1.1.1.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/jsp-api.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/servlet-api.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/tomcat-api.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/tomcat-coyote.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/tomcat-dbcp.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/tomcat-i18n-es.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/tomcat-i18n-fr.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/tomcat-i18n-ja.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/tomcat-jdbc.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/tomcat-util.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/tomcat7-websocket.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/websocket-api.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Amel RABOUDI/workspace/apache-log4j-1.2.17/log4j-1.2.17.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/sqlite-jdbc-3.8.11.2.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>

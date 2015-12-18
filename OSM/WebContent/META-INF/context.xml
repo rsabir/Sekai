@@ -17,7 +17,18 @@
 -->
 <!-- The contents of this file will be loaded for each web application -->
 <Context>
-
+  <!-- <Resource name="jdbc/sqlite"
+    type="javax.sql.DataSource"
+    driverClassName="org.sqlite.JDBC"
+    factory="org.apache.tomcat.jdbc.pool.DataSourceFactory"
+    url="jdbc:sqlite:..\..\..\OSM\server.db"
+    /> --> 
+     <Resource name="jdbc/server" 
+            type="javax.sql.DataSource" 
+            driverClassName="org.sqlite.JDBC"
+            url="jdbc:sqlite:/${catalina.home}/dbs/server.db"
+            factory="org.apache.tomcat.dbcp.dbcp.BasicDataSourceFactory">
+  </Resource> 
     <!-- Default set of monitored resources -->
     <WatchedResource>WEB-INF/web.xml</WatchedResource>
 

@@ -2,7 +2,6 @@ package servlet;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 
@@ -12,29 +11,32 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.log4j.Logger;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
-import constants.Urls;
 import server.Server;
 import server.ServerClient;
 import server.ServerServer;
+import sqlite.controller.DBManager;
 import utils.ConfigUtils;
 import utils.PayloadUtils;
+import constants.Urls;
 
 /**
  * Servlet implementation class SendGPS
  */
-@WebServlet("/SendGPS")
 public class SendGPS extends HttpServlet {
+	//private static final Logger LOGGER = Logger.getLogger(SendGPS.class);
 	private static final long serialVersionUID = 1L;
 	private static final String PAYLOADPARAMETER = "paylaod";
 	private static final String URL = "http://localhost";
+	private DBManager dbManager=null;
 
 	public SendGPS() {
-
+		dbManager = new DBManager(Urls.serverName);
 	}
 
 	/**
@@ -44,6 +46,7 @@ public class SendGPS extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		// TODO Auto-generated method stub
+		System.out.println("Get");
 		response.getWriter().append("Served at: ").append(request.getContextPath());
 	}
 
@@ -53,7 +56,7 @@ public class SendGPS extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-
+		System.out.println("Post");
 		try {
 			String payloadString = "";
 			// 1. get received JSON data from request
@@ -85,12 +88,18 @@ public class SendGPS extends HttpServlet {
 				if (servers.size() == 1 && ServerClient.isInCharge(servers)) {
 					response.setStatus(HttpServletResponse.SC_OK);
 					// TODO Add to database
+					System.out.println("before");
+					dbManager.addData(payload.getId(), payload.getLon(), payload.getLat());
+					System.out.println("after");
 					jsonResponse.put("code", 0);
 
 				} else if (ServerClient.isInCharge(servers)) {
 					JSONParser jsonParser = new JSONParser();
 					ServerServer.notifyAdd((JSONObject) jsonParser.parse(payloadString), servers);
 					// TODO Add to database
+					System.out.println("before");
+					dbManager.addData(payload.getId(), payload.getLon(), payload.getLat());
+					System.out.println("before");
 					response.setStatus(HttpServletResponse.SC_OK);
 					jsonResponse.put("code", 0);
 				} else if (servers.size()>0) {
@@ -112,6 +121,9 @@ public class SendGPS extends HttpServlet {
 				if (ServerClient.isInCharge(servers)) {
 					response.setStatus(HttpServletResponse.SC_OK);
 					// TODO Add to database
+					System.out.println("before");
+					dbManager.addData(payload.getId(), payload.getLon(), payload.getLat());
+					System.out.println("before");
 					jsonResponse.put("code", 0);
 				}
 			}
