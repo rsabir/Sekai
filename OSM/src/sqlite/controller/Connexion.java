@@ -6,6 +6,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.sql.DataSource;
+
 /**
  * Created by RABOUDI on 18/11/2015.
  */
@@ -21,12 +25,12 @@ public class Connexion {
 
 	public void connect() {
 		try {
-			  Class.forName("org.sqlite.JDBC");
-		      connection = DriverManager.getConnection("jdbc:sqlite:" + DBName
-		  + ".db");
-			// Context ctx = new InitialContext();
-	          //DataSource ds = (DataSource)ctx.lookup("java:comp/env/jdbc/server");
-	          //Connection connection = ds.getConnection();
+//			  Class.forName("org.sqlite.JDBC");
+//			  connection = DriverManager.getConnection("jdbc:sqlite:" + DBName
+//		  + ".db");
+			 Context ctx = new InitialContext();
+	         DataSource ds = (DataSource)ctx.lookup("java:comp/env/jdbc/server");
+	         connection = ds.getConnection();
 			statement = connection.createStatement();
 			System.out.println("Connexion a la base de donnée de " + DBName
 					+ " effectuée avec succès");

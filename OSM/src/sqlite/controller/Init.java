@@ -28,7 +28,7 @@ public class Init {
                         "(USERID        INT  NOT NULL REFERENCES User(ID),\n" +
                         " NODEID         INT  NOT NULL REFERENCES Node(ID),\n" +
                         " DATEOFADD     DATE NOT NULL,\n" +
-                        "  PRIMARY KEY(USERID, NODEID)\n" +
+                        "  PRIMARY KEY(USERID, NODEID, DATEOFADD)\n" +
                         "\n" +
                         ");";
         DBcnx.update(createStatement);

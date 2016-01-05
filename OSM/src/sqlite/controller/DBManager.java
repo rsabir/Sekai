@@ -97,7 +97,7 @@ public class DBManager {
 		/**
 		 * pour chaque user 
 		 * chercher le marquer correspondant
-		 * cad le plus récent
+		 * cad le plus rï¿½cent
 		 * constituer le Map
 		 * constituter la liste
 		 */
@@ -115,7 +115,7 @@ public class DBManager {
 			client.put("id", user.getMacAddr());
 			clientList.add(client);
 			} else {
-				System.out.println("User "+user.getMacAddr()+" does not exist");
+				System.out.println("User "+user.getMacAddr()+" does not have a GPS (SKIP)");
 			}
 		}
 		//System.out.println(clientList);
@@ -125,10 +125,12 @@ public class DBManager {
 		Map client = new LinkedHashMap();
 		int userID = userDAO.getIDfromMAC(MACID);
 		Marquer marquer = marquerDAO.getRecentMarquer(userID);
-		Node node = nodeDAO.getNodeByID(marquer.getPosition());
-		client.put("lat",node.getLatitude());
-		client.put("lgn",node.getLongitude());
-		client.put("id", MACID);
+		if (marquer!=null){
+			Node node = nodeDAO.getNodeByID(marquer.getPosition());
+			client.put("lat",node.getLatitude());
+			client.put("lgn",node.getLongitude());
+			client.put("id", MACID);
+		}
 		return client;
 	}
 	public ArrayList<String> getMACS() {
@@ -140,7 +142,7 @@ public class DBManager {
 		// TODO Auto-generated method stub
 		/*
 		 * avoir l'id a partir de la mac adresse
-		 * aller chercher les marquers de la journée
+		 * aller chercher les marquers de la journï¿½e
 		 * extraire leurs longitude latitude node id
 		 * construire les client
 		 * les renvoyer
