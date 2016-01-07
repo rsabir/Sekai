@@ -82,7 +82,8 @@ public class GetClients extends HttpServlet {
 			clientList=new LinkedList<Map<String, Comparable>>();
 			clientList.add(dbManager.getClientData(client));
 			//System.out.println(clientList);
-			if (clientList==null); 
+			if (clientList==null)
+				returnError(jsonResponse, jsonParser, response); //; 
 		}
 		Map obj=new LinkedHashMap();
 		obj.put("code",new Integer(0));

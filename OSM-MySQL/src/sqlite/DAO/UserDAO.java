@@ -19,7 +19,7 @@ private Connexion DBconx=null;
 
     public ArrayList<String> getMacAddressList(){
 		ArrayList<String> result = new ArrayList<String>();
-			ResultSet rs = DBconx.query("select MACADDR from User");
+			ResultSet rs = DBconx.query("select MACADDR from USER");
 			if (rs != null) {
 				try {
 					while (rs.next()) {
@@ -65,7 +65,7 @@ private Connexion DBconx=null;
 		//prepare the insertion statement
 		String insertStatement = new String();
 		if (name == null) {
-			insertStatement = "INSERT INTO User(MACADDR)\n" + "Values (\""
+			insertStatement = "INSERT INTO USER(MACADDR)\n" + "Values (\""
 					+ MAC + "\");";
 		} else {
 			insertStatement = "INSERT INTO User(NAME,MACADDR)\n" + "Values (\""

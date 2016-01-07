@@ -19,8 +19,13 @@
 		 <link href="css/jquery-ui.structure.min.css" rel='stylesheet' type='text/css'/>
 		 <link href="css/jquery-ui.theme.min.css" rel='stylesheet' type='text/css'/>
 		 <link href='css/font-awesome.min.css' rel='stylesheet' type='text/css'>
+		 <link href="css/animate.min.css" rel='stylesheet' type='text/css'/>
 		 <style type="text/css">
 		 	#map { height: 80vh; }
+		 	body{
+		 		margin:0;
+		 		position:relative;
+		 	}
 		 	h1{
 		 		color:white;
 		 		text-align:center;
@@ -104,6 +109,33 @@
 		 		bottom:5px;
 		 		right:5px;
 		 	}
+		 	div#noclient{
+		 		display:none;
+		 		width: 100%;
+				position: absolute;
+				z-index: 1000;
+				bottom: 0px;
+		 	}
+		 	div#noclient #message{
+		 		background : white;
+		 		width:50%;
+		 		margin-left:auto;
+		 		margin-right:auto;
+		 		text-align:center;
+		 		padding:5px;
+		 		-moz-box-shadow: 0px -5px 5px 0px #656565;
+				-webkit-box-shadow: 0px -5px 5px 0px #656565;
+				-o-box-shadow: 0px -5px 5px 0px #656565;
+				box-shadow: 0px -5px 5px 0px #656565;
+				filter:progid:DXImageTransform.Microsoft.Shadow(color=#656565, Direction=90, Strength=5);
+				-webkit-border-top-left-radius: 5px;
+				-webkit-border-top-right-radius: 5px;
+				-moz-border-radius-topleft: 5px;
+				-moz-border-radius-topright: 5px;
+				border-top-left-radius: 5px;
+				border-top-right-radius: 5px;
+				font-family: "Open Sans",sans-serif;
+		 	}
 		 </style>
 		<title>The Map</title>
 	</head>
@@ -122,6 +154,8 @@
 	var varGlobClient = [];
 	var optionSelected=0;	
 	var all=1;
+	
+	var divNoClient = $("div#noclient");
 	
 	var southWest = L.latLng(minLat,minLgn ),
     northEast = L.latLng(maxLat,maxLgn),
@@ -156,11 +190,28 @@
 			},function(data){
 				markers = [];
 				if (data.code==0){
-					$.each(data.clients,function(index,client){
-						markers.push( L.marker([client.lat,client.lgn]).bindPopup(client.id).addTo(map) );
-					});					
-					
-				}	
+					if (data.clients.length==0 && !divNoClient.hasClass("animated") ){	
+						divNoClient.addClass('animated fadeInUp').show();
+						setTimeout(function(){
+							divNoClient.removeClass('fadeInUp').addClass('animated fadeOutDown').show()
+							.one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend',function(){
+								divNoClient.removeClass('animated fadeOutDown').hide();
+							});
+						}, 6000);
+					}
+					else
+						$.each(data.clients,function(index,client){
+							markers.push( L.marker([client.lat,client.lgn]).bindPopup(client.id).addTo(map) );
+						});					
+				}else if (!divNoClient.hasClass("animated") ){
+					divNoClient.addClass('animated fadeInUp').show();
+					setTimeout(function(){
+						divNoClient.removeClass('fadeInUp').addClass('animated fadeOutDown').show()
+						.one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend',function(){
+							divNoClient.removeClass('animated fadeOutDown').hide();
+						});
+					}, 6000);
+				}
 			},"json").fail(function() {
 			    alert( "error" );
 			  });
@@ -185,11 +236,14 @@
 	
 	$(document).ready(function(){
 		
+		divNoClient = $("div#noclient");
+		
 		$("#mapContainer").append('<div id="search" class="">'+
 		'<div class="container_icon"><i class="fa fa-search"></i></div>'+
 		'<input placeholder="Search for client" id="input_client"/>'+
 		'</div>');
 		$("#mapContainer").append(
+
 			    '<FORM id="select">'+
 			    '<SELECT name="nom" size="1">'+
 			    '<OPTION id="sans">sans trajet</option>'+
@@ -197,9 +251,10 @@
 			    '<OPTION id="hier" disabled>hier</option>'+
 			    '</SELECT>'+
 			    '</FORM>');
+
 		var timer = setInterval(function(){
 			setMarkers(all,varGlobClient);
-		}, 8000);
+		}, 100);
 		
 		$("#input_client").autocomplete({
 	        source: function(request,response){
@@ -220,7 +275,8 @@
 	        	at: "left top" 
 	        },
 	        html: true, // optional (jquery.ui.autocomplete.html.js required)
-		    // optional (if other layers overlap autocomplete list)
+
+	        // optional (if other layers overlap autocomplete list)
 	        open: function(event, ui) {
 	            $(".ui-autocomplete").css("z-index", 1000);
 	            $("#search").addClass("extend");
@@ -279,13 +335,16 @@
 			$("option#ajd,option#hier").prop('disabled',false);
 		}
 	}
+
 // 	L.marker([51.5, -0.09]).addTo(map)
 // 		.bindPopup("<b>Hello world!</b><br />I am a popup.").openPopup();
+
 // 	L.circle([51.508, -0.11], 500, {
 // 		color: 'red',
 // 		fillColor: '#f03',
 // 		fillOpacity: 0.5
 // 	}).addTo(map).bindPopup("I am a circle.");
+
  	L.polygon([
  		[minLat,minLgn ],
  		[minLat,maxLgn ],
@@ -295,13 +354,24 @@
  	],{
  		 fillOpacity: 0
  	}).addTo(map);
+
+
 	var popup = L.popup();
+
 	function onMapClick(e) {
 		popup
 			.setLatLng(e.latlng)
 			.setContent("You clicked the map at " + e.latlng.toString())
  			.openOn(map);
  	}
+
  	map.on('click', onMapClick);
+
 	</script>
+	<div id="noclient">
+		<div id="message">
+			<div class="text">No current client available in the server</div>
+		</div>
+	</div>
 	</body>
+</html>
