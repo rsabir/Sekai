@@ -172,7 +172,7 @@
 				
 				listLatlgn = [];
 				$.each(data.history,function(index,entry){
-					listLatlgn.push(L.latLng(entry.lat,entry.lgn));
+					listLatlgn.push(L.latLng(entry.lat,entry.lon));
 				});	
 				polyline = L.polyline(listLatlgn, {color: 'red'}).addTo(map);
 			},"json").fail(function() {
@@ -201,12 +201,14 @@
 
 		var timer = setInterval(function(){
 			setMarkers(all,varGlobClient);
-		}, 10000);
+		}, 8000);
 		
 		$("#input_client").autocomplete({
 	        source: function(request,response){
-	        	$.get("AutocompleteClient",function(data){
-	        		response(data);
+	        	$.get("AutocompleteClient",
+	        			{data:request.term},
+	        			function(data){
+	        				response(data);
 	        	},"json");
 	        },
 	        minLength: 2,

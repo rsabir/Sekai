@@ -68,7 +68,37 @@ public class MarquerDAO {
 		//System.out.println(userId);
 		String queryStatement="select * from Marquer where userID="+
 		userId+
-		" order by DATEOFADD DESC limit 1";
+		"  and strftime('%s','now') +3600 - strftime('%s',DATEOFADD)<20 order by DATEOFADD DESC limit 1"; // 3600 pour avoir l'heure de france
+		ResultSet resultSet =DBconx.query(queryStatement);
+		try {
+		if (resultSet.next()) {
+			int id = resultSet.getInt("userID");
+		    int node = resultSet.getInt("nodeID");
+		    String dateStr = resultSet.getString("dateofadd");
+		    SimpleDateFormat fd = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");  
+		    Date dateOfAdd = null;
+			  
+			try {
+				dateOfAdd = fd.parse(dateStr);
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				//e.printStackTrace();
+			}
+		    result=new Marquer(id,node,dateOfAdd);
+			  }
+			 } catch (SQLException e) {
+			// TODO Auto-generated catch block
+			//e.printStackTrace();
+		}
+		
+		return result;
+	}
+	public Marquer getRecentMarquerClient(int userId) {
+		Marquer result=null;
+		//System.out.println(userId);
+		String queryStatement="select * from Marquer where userID="+
+		userId+
+		"  order by DATEOFADD DESC limit 1"; // 3600 pour avoir l'heure de france
 		ResultSet resultSet =DBconx.query(queryStatement);
 		try {
 			  if (resultSet.next()) {
@@ -93,17 +123,16 @@ public class MarquerDAO {
 		
 		return result;
 	}
-
 	public ArrayList<Marquer> getMarquersToday(int userID) {
 		// TODO Auto-generated method stub
 		/*
 		 * select sur ceux qui ont la date d'aujourd'hui
 		 * 
 		 */
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-		Calendar c = Calendar.getInstance();
-		c.add(Calendar.DATE, 1);  // number of days to add
-		String dt = sdf.format(c.getTime());
+//		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+//		Calendar c = Calendar.getInstance();
+//		c.add(Calendar.DATE, 1);  // number of days to add
+//		String dt = sdf.format(c.getTime());
 		/*SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		Date myDate = null;
 		try {
@@ -118,10 +147,10 @@ public class MarquerDAO {
 		// DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
 	    // Date dateobj = new Date();
 		ResultSet resultSet =DBconx.query("select * from marquer where userID = "+userID
-				+" and DateOfAdd < Datetime("+ dt+");");
-        List<Marquer> li=new ArrayList<Marquer>();
+				+" And date(dateofadd)=date('now') ");
+        ArrayList<Marquer> li=new ArrayList<Marquer>();
         try {
-        	System.out.println(resultSet.next());
+        	//System.out.println(resultSet.next());
             while (resultSet.next()) {
             	System.out.println(resultSet.next());
                 int user= resultSet.getInt("USERID");
@@ -131,21 +160,50 @@ public class MarquerDAO {
                 Date dateOfAdd = null;
 				try {
 					dateOfAdd = fd.parse(dateOfAddStr);
+					Marquer marq=new Marquer(user,nodeID,dateOfAdd);
+					li.add(marq);
 				} catch (ParseException e) {
 					// TODO Auto-generated catch block
-					e.printStackTrace();
+					//e.printStackTrace();
 				}
+				
+				
             }
         } catch (Exception e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			//e.printStackTrace();
 		}
-		return null;
+		return li;
 	}
 
 	public ArrayList<Marquer> getMarquersYesterday(int userID) {
-		// TODO Auto-generated method stub
-		return null;
+		ResultSet resultSet =DBconx.query(" SELECT * FROM Marquer where userid= "+userID
+				+" and strftime('%s',date('now'))-strftime('%s',dateofadd)>=3600*24 and strftime('%s',date('now'))-strftime('%s',dateofadd)<=3600*48 ");
+        ArrayList<Marquer> li=new ArrayList<Marquer>();
+        try {
+        	//System.out.println(resultSet.next());
+            while (resultSet.next()) {
+            	System.out.println(resultSet.next());
+                int user= resultSet.getInt("USERID");
+                int nodeID= resultSet.getInt("NODEID");
+                String dateOfAddStr= resultSet.getString("DATEOFADD");
+                SimpleDateFormat fd = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                Date dateOfAdd = null;
+				try {
+					dateOfAdd = fd.parse(dateOfAddStr);
+					Marquer marq=new Marquer(user,nodeID,dateOfAdd);
+					li.add(marq);
+				} catch (ParseException e) {
+					// TODO Auto-generated catch block
+					//e.printStackTrace();
+				}
+				
+				
+            }
+        } catch (Exception e) {
+			//e.printStackTrace();
+		}
+		return li;
 	}
 
 

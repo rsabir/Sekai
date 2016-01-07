@@ -58,7 +58,6 @@ public class ConfigUtils {
 		ArrayList<String> result = new ArrayList<String>();
 		for (int i=0; i<config.size(); i++){
 			ArrayList<Object> tmp = config.get(i);
-			// gps[0]=lat     gps[1]=lon
 			if (gps[0]>Float.parseFloat(tmp.get(0).toString()) || gps[0]<Float.parseFloat(tmp.get(1).toString())  || 
 					gps[1]>Float.parseFloat(tmp.get(2).toString())  || gps[1]<Float.parseFloat(tmp.get(3).toString()) )
 				continue;
