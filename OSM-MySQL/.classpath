@@ -43,6 +43,7 @@
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/tomcat7-websocket.jar"/>
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/websocket-api.jar"/>
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/sqlite-jdbc-3.8.11.2.jar"/>
+	<classpathentry kind="lib" path="/home/rhost/Documents/josm/OSM-MySQL/WebContent/WEB-INF/lib/mysql-connector-java-5.1.38-bin.jar"/>
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/mysql-connector-java-5.1.38-bin.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>
