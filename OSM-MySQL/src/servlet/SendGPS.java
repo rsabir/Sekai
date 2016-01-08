@@ -89,14 +89,13 @@ public class SendGPS extends HttpServlet {
 					// TODO Verify
 					System.out.println("before");
 					if (dbManager.addData(payload.getId(), payload.getLon(), payload.getLat())) jsonResponse.put("code", 0);
-					else jsonResponse.put("code", 1);
+					else jsonResponse.put("code", -1);
 					System.out.println("after");
 					
 
 				} else if (ServerClient.isInCharge(servers)) {
 					JSONParser jsonParser = new JSONParser();
 					ServerServer.notifyAdd((JSONObject) jsonParser.parse(payloadString), servers);
-					// TODO Add to database
 					System.out.println("before");
 					dbManager.addData(payload.getId(), payload.getLon(), payload.getLat());
 					System.out.println("before");

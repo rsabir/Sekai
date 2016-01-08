@@ -14,10 +14,13 @@ public class ServerServer {
 			if (server.equals(Urls.IP)){
 				continue;
 			}
+			payload.remove("isServer");
+			payload.put("isServer", true);
+			final String url = "http://"+server+":8080/SendGPS";
 			Thread t = new Thread(new Runnable(){
 				public void run(){
 					try {
-						HttpSendRequest.sendPost(server,payload);
+						HttpSendRequest.sendPost(url,payload);
 					} catch (Exception e) {
 						e.printStackTrace();
 					}

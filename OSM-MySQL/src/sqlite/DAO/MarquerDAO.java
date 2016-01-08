@@ -94,7 +94,7 @@ public class MarquerDAO {
 	public ArrayList<Marquer> getMarquersToday(int userID) {
 
 		ResultSet resultSet = DBconx
-				.query("Select * from marquer where DATEDIFF(NOW(),dateofadd)=0 AND userid = "
+				.query("Select * from MARQUER where DATEDIFF(NOW(),dateofadd)=0 AND userid = "
 						+ userID);
 		ArrayList<Marquer> li = new ArrayList<Marquer>();
 		if (resultSet == null)

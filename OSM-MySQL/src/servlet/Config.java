@@ -1,5 +1,8 @@
 package servlet;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 
@@ -33,40 +36,43 @@ public class Config extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		String jsonString =  "{\"servers\":["+
-	             "{"+
-	                "\"zone\":{"+
-	                       "\"maxlat\": 44.8448769,"+
-	                       "\"minlat\": 44.8305549,"+
-	                      " \"maxlon\": -0.5275520000000142,"+
-	                       "\"minlon\": -0.6563579999999547"+
-	                "},"+
-	                "\"host\":\"172.20.0.43\""+
-	             "},{"+
-		             "\"zone\":{"+
-		                 "\"maxlat\": 44.8448769,"+
-		                 "\"minlat\": 44.8305549,"+
-		                " \"maxlon\": -0.6,"+
-		                 "\"minlon\": -0.7"+
-                 	"},"+
-                 	"\"host\":\"172.20.0.45\""+
-	                "},{"+
-	                "\"zone\":{"+
-	                 "\"maxlat\": 44.9448769,"+
-	                 "\"minlat\": 44.8448769,"+
-	                " \"maxlon\": -0.6,"+
-	                 "\"minlon\": -0.7"+
-            	"},"+
-            		"\"host\":\"172.20.0.46\""+
-            		"},{"+
-	                "\"zone\":{"+
-	                 "\"maxlat\": 44.9448769,"+
-	                 "\"minlat\": 44.8448769,"+
-	                " \"maxlon\": -0.7,"+
-	                 "\"minlon\": -0.8"+
-            	"},"+
-            		"\"host\":\"172.20.0.47\""+
-	             "}]}";
+		String path = getServletContext().getRealPath(File.separator+"WEB-INF"+File.separator+"config.json");
+		String jsonString = readFile( path ); 
+		//"{\"servers\":["+
+//	             "{"+
+//	                "\"zone\":{"+
+//	                       "\"maxlat\": 44.8448769,"+
+//	                       "\"minlat\": 44.8305549,"+
+//	                      " \"maxlon\": -0.5275520000000142,"+
+//	                       "\"minlon\": -0.6563579999999547"+
+//	                "},"+
+//	                "\"host\":\"172.20.0.43\""+
+//	             "},{"+
+//		             "\"zone\":{"+
+//		                 "\"maxlat\": 44.8448769,"+
+//		                 "\"minlat\": 44.8305549,"+
+//		                " \"maxlon\": -0.6,"+
+//		                 "\"minlon\": -0.7"+
+//                 	"},"+
+//                 	"\"host\":\"172.20.0.45\""+
+//	                "},{"+
+//	                "\"zone\":{"+
+//	                 "\"maxlat\": 44.9448769,"+
+//	                 "\"minlat\": 44.8448769,"+
+//	                " \"maxlon\": -0.6,"+
+//	                 "\"minlon\": -0.7"+
+//            	"},"+
+//            		"\"host\":\"172.20.0.46\""+
+//            		"},{"+
+//	                "\"zone\":{"+
+//	                 "\"maxlat\": 44.9448769,"+
+//	                 "\"minlat\": 44.8448769,"+
+//	                " \"maxlon\": -0.7,"+
+//	                 "\"minlon\": -0.8"+
+//            	"},"+
+//            		"\"host\":\"172.20.0.47\""+
+//	             "}]}";
+//		
 		JSONParser jsonParser = new JSONParser();
 		JSONObject jsonResponse;
 		try {
@@ -88,6 +94,23 @@ public class Config extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		doGet(request, response);
+	}
+	
+	private static String readFile(String filename) {
+	    String result = "";
+	    try {
+	        BufferedReader br = new BufferedReader(new FileReader(filename));
+	        StringBuilder sb = new StringBuilder();
+	        String line = br.readLine();
+	        while (line != null) {
+	            sb.append(line);
+	            line = br.readLine();
+	        }
+	        result = sb.toString();
+	    } catch(Exception e) {
+	        e.printStackTrace();
+	    }
+	    return result;
 	}
 
 }
