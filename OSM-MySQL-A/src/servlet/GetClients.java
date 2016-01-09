@@ -33,7 +33,7 @@ public class GetClients extends HttpServlet {
      */
     public GetClients() {
         super();
-        dbManager= new DBManager("server");
+        dbManager= new DBManager();
         // TODO Auto-generated constructor stub
     }
 
@@ -76,13 +76,14 @@ public class GetClients extends HttpServlet {
 		if (all.equals("1")){
 			clientList=dbManager.getAllData();
 			if (clientList==null)
-				returnError(jsonResponse, jsonParser, response); //
+				returnError(jsonResponse, jsonParser, response);
 		}else{
 			String client= request.getParameter("client");
 			clientList=new LinkedList<Map<String, Comparable>>();
 			clientList.add(dbManager.getClientData(client));
 			//System.out.println(clientList);
-			if (clientList==null); 
+			if (clientList==null)
+				returnError(jsonResponse, jsonParser, response); 
 		}
 		Map obj=new LinkedHashMap();
 		obj.put("code",new Integer(0));
