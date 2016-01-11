@@ -14,9 +14,9 @@ public class PayloadUtils {
 		JSONParser jsonParser = new JSONParser();
 		JSONObject payloadJSON =(JSONObject)jsonParser.parse(jsonString);
 		id = ((JSONObject)payloadJSON.get("client")).get("ID").toString();
-		JSONObject poisitionJSON = (JSONObject) ((JSONObject)payloadJSON.get("client")).get("Position");
-		lat = Float.parseFloat(String.valueOf(poisitionJSON.get("lat")));
-		lon = Float.parseFloat(String.valueOf(poisitionJSON.get("lon")));
+		JSONObject positionJSON = (JSONObject) ((JSONObject)payloadJSON.get("client")).get("Position");
+		lat = Float.parseFloat(String.valueOf(positionJSON.get("lat")));
+		lon = Float.parseFloat(String.valueOf(positionJSON.get("lon")));
 		//isServer = (boolean) payloadJSON.get("isServer");
 		isServer = Boolean.valueOf(payloadJSON.get("isServer").toString());
 		gps = new float[2];

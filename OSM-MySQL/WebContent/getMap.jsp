@@ -161,40 +161,9 @@
 	var maxLat;
 	var maxLgn;
 	var map;
-	$.get("/GetLatLgn",function(data){
-		if (data.code==0){
-			minLat = data.minLat;
-			minLgn = data.minLgn;
-			maxLat = data.maxLat;
-			maxLgn = data.maxLgn;
-			var southWest = L.latLng(minLat,minLgn ),
-		    northEast = L.latLng(maxLat,maxLgn),
-		    bounds = L.latLngBounds( southWest,northEast);
-			map = L.map('map',{
-				maxBounds : bounds,
-				center: [(minLat+maxLat)/2, (minLgn+maxLgn)/2],
-			    zoom: 15,
-			    minZoom:13
-			});
-			map.fitBounds(bounds);
-			L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6IjZjNmRjNzk3ZmE2MTcwOTEwMGY0MzU3YjUzOWFmNWZhIn0.Y8bhBaUMqFiPrDRW9hieoQ', {
-				maxZoom: 18,
-				id: 'mapbox.streets'
-			}).addTo(map);
+	var polyline;
+	
 
-		 	L.polygon([
-		 		[minLat,minLgn ],
-		 		[minLat,maxLgn ],
-		 		[maxLat,maxLgn],
-		 		[maxLat,minLgn ]
-				
-		 	],{
-		 		 fillOpacity: 0
-		 	}).addTo(map);
-		}else{
-			$("#error").show();
-		}
-	},"json");
 	var varGlobClient = [];
 	var optionSelected=0;	
 	var all=1;
@@ -208,9 +177,9 @@
 // 	}).addTo(map);
 	var markers = [];
 	var listLatlgn = [];
-	var polyline;
+	
 	function setMarkers(all,varGlobClient){
-		if (polyline!=undefined){
+		if (polyline!=undefined && optionSelected == 0){
 			map.removeLayer(polyline);
 			polyline = undefined;
 		}
@@ -227,11 +196,14 @@
 					if (data.clients.length==0 && !divNoClient.hasClass("animated") ){	
 						divNoClient.addClass('animated fadeInUp').show();
 						setTimeout(function(){
+							setTimeout(function(){
+								divNoClient.removeClass('animated').hide();
+							},10000);
 							divNoClient.removeClass('fadeInUp').addClass('animated fadeOutDown').show()
 							.one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend',function(){
-								divNoClient.removeClass('animated fadeOutDown').hide();
+								divNoClient.removeClass('fadeOutDown').hide();
 							});
-						}, 6000);
+						}, 3000);
 					}
 					else
 						$.each(data.clients,function(index,client){
@@ -240,16 +212,19 @@
 				}else if (!divNoClient.hasClass("animated") ){
 					divNoClient.addClass('animated fadeInUp').show();
 					setTimeout(function(){
+						setTimeout(function(){
+							divNoClient.removeClass('animated').hide();
+						},10000);
 						divNoClient.removeClass('fadeInUp').addClass('animated fadeOutDown').show()
 						.one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend',function(){
-							divNoClient.removeClass('animated fadeOutDown').hide();
+							divNoClient.removeClass('fadeOutDown').hide();
 						});
-					}, 6000);
+					}, 3000);
 				}
 			},"json").fail(function() {
 			  
 			  });
-		}else{
+		}else if (polyline == undefined){
 			$.post("GetHistory",{
 				optionSelected:optionSelected,
 				client : varGlobClient
@@ -261,7 +236,7 @@
 				});	
 				polyline = L.polyline(listLatlgn, {color: 'red'}).addTo(map);
 			},"json").fail(function() {
-			    alert( "error" );
+			//    alert( "error" );
 			  });
 		}
 		 
@@ -387,8 +362,40 @@
 			.setContent("You clicked the map at " + e.latlng.toString())
  			.openOn(map);
  	}
-
- 	map.on('click', onMapClick);
+	$.get("/GetLatLgn",function(data){
+		if (data.code==0){
+			minLat = data.minLat;
+			minLgn = data.minLgn;
+			maxLat = data.maxLat;
+			maxLgn = data.maxLgn;
+			var southWest = L.latLng(minLat,minLgn ),
+		    northEast = L.latLng(maxLat,maxLgn),
+		    bounds = L.latLngBounds( southWest,northEast);
+			map = L.map('map',{
+				maxBounds : bounds,
+				center: [(minLat+maxLat)/2, (minLgn+maxLgn)/2],
+			    zoom: 15,
+			    minZoom:13
+			});
+			map.fitBounds(bounds);
+			L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6IjZjNmRjNzk3ZmE2MTcwOTEwMGY0MzU3YjUzOWFmNWZhIn0.Y8bhBaUMqFiPrDRW9hieoQ', {
+				maxZoom: 18,
+				id: 'mapbox.streets'
+			}).addTo(map);
+			map.on('click', onMapClick);
+		 	L.polygon([
+		 		[minLat,minLgn ],
+		 		[minLat,maxLgn ],
+		 		[maxLat,maxLgn],
+		 		[maxLat,minLgn ]
+				
+		 	],{
+		 		 fillOpacity: 0
+		 	}).addTo(map);
+		}else{
+			$("#error").show();
+		}
+	},"json");
 
 	</script>
 	<div id="noclient">
