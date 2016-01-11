@@ -1,6 +1,7 @@
 package database.controller;
 
 import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -9,39 +10,45 @@ import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.sql.DataSource;
 
+import constants.Mysql;
+
 public class Connexion {
 	 private static volatile Connexion instance = null;
 	 private static Connection connection = null;
 		//private Statement statement = null;
-		private static Context context = null;
-		private static DataSource datasource = null;
+	private static Context context = null;
+	private static DataSource datasource = null;
 
-	 private Connexion(){
+	 private Connexion() throws SQLException{
 		 super();
-		 try {
+		 
 			 // Get the context and create a connection
-			context = new InitialContext();
-			datasource = (DataSource) context.lookup("java:/comp/env/jdbc/server");
-			connection = datasource.getConnection();
-			System.out.println("Connexion a la base de donnée de "
-					+ " effectuée avec succés");
-		} catch (Exception e) {
-			System.out.println("Erreur de connection");
-		}
+			connection = DriverManager.getConnection("jdbc:mysql://localhost:"+Mysql.PORT+"/"+Mysql.DATABASE,Mysql.USERNAME,Mysql.PASSWORD);
+			System.out.println("Connexion a la base de donnï¿½e de "
+					+ " effectuï¿½e avec succï¿½s");
 	 }
 
 public final static Connexion getInstance() {
 	 if (Connexion.instance == null) {
 		 synchronized(Connexion.class) {
              if (Connexion.instance == null) {
-               Connexion.instance = new Connexion();
+               try {
+            	   Connexion.instance = new Connexion();
+               } catch (SQLException e) {
+				return null;
+               }
              }
            }
 	 }
 	return Connexion.instance;
 	
 }
-
+public static Connection getMysqlConnection(){
+	return connection;
+}
+public static void destruct(){
+	Connexion.instance = null;
+}
 public ResultSet query(String request) {
 	 ResultSet resultat = null;
       try {

@@ -25,13 +25,14 @@
     /> --> 
      
 
-    <Resource name="jdbc/server"
-        auth="Container"
-       driverClassName="com.mysql.jdbc.Driver"
-       type="javax.sql.DataSource"
-        username="root"
-        password=""
-        url="jdbc:mysql://localhost:3306/osm"/>
+<!--     <Resource name="jdbc/server" -->
+<!--            auth="Container" -->
+<!-- 	       driverClassName="com.mysql.jdbc.Driver" -->
+<!-- 	       type="javax.sql.DataSource" -->
+<!-- 	       username="root" -->
+<!-- 	       password="" -->
+<!-- 	       url="jdbc:mysql://localhost:3306/osm"/> -->
+	      
 
 <!--<Resource name="jdbc/[YourDatabaseName]"-->
 <!---->
@@ -51,7 +52,6 @@
 <!---->
 <!--maxIdle="3"/>-->
 
-- See more at: https://www.mulesoft.com/tcat/tomcat-mysql#sthash.kX4WAuxf.dpuf
     <!-- Default set of monitored resources -->
     <WatchedResource>WEB-INF/web.xml</WatchedResource>
 

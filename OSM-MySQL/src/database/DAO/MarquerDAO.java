@@ -22,7 +22,7 @@ public class MarquerDAO {
     }
 
     private User getUser(int userID){
-        ResultSet rs=  Connexion.getInstance().query("select ID, NAME, MACADDR from User where ID="+ userID);
+        ResultSet rs=  Connexion.getInstance().query("select ID, NAME, MACADDR from USER where ID="+ userID);
         try {
             String name = rs.getString("NAME");
             String macAddr = rs.getString("MACADDR");
@@ -34,7 +34,7 @@ public class MarquerDAO {
     }
     private Node getNode(int nodeID){
         ResultSet rs=  Connexion.getInstance().query("select ID, " +
-                "LONGITUDE, LATITUDE from Node where ID="+ nodeID);
+                "LONGITUDE, LATITUDE from NODE where ID="+ nodeID);
         try {
             long longitude = rs.getLong("LONGITUDE");
             long latitude = rs.getLong("LATITUDE");
@@ -49,7 +49,7 @@ public class MarquerDAO {
 		// String insertStatement = "INSERT INTO Marquer(USERID,NODEID,DATEOFADD)\n"
 			//	+ "Values (" + userID + "," + nodeID + ",\"" + date + "\");\n";
 
-		String insertStatement = "INSERT INTO Marquer(USERID,NODEID,DATEOFADD)\n"
+		String insertStatement = "INSERT INTO MARQUER(USERID,NODEID,DATEOFADD)\n"
 				+ "Values (" + userID + "," + nodeID + ",NOW());\n";
 		if ( Connexion.getInstance().update(insertStatement))
 			return true;
@@ -59,7 +59,7 @@ public class MarquerDAO {
 	public Marquer getRecentMarquer(int userId) {
 		Marquer result=null;
 		//System.out.println(userId);
-		String queryStatement="Select * from marquer where " +
+		String queryStatement="Select * from MARQUER where " +
 				"time_to_sec(NOW())-time_to_sec(dateofadd)<20 and " +
 				"userid = "+userId; // 3600 pour avoir l'heure de france
 		ResultSet resultSet = Connexion.getInstance().query(queryStatement);
@@ -89,7 +89,7 @@ public class MarquerDAO {
 	public ArrayList<Marquer> getMarquersToday(int userID) {
 
 		ResultSet resultSet = Connexion.getInstance()
-				.query("Select * from marquer where DATEDIFF(NOW(),dateofadd)=0 AND userid = "
+				.query("Select * from MARQUER where DATEDIFF(NOW(),dateofadd)=0 AND userid = "
 						+ userID);
 		ArrayList<Marquer> li = new ArrayList<Marquer>();
 		if (resultSet == null)
@@ -119,7 +119,7 @@ public class MarquerDAO {
 
 	public ArrayList<Marquer> getMarquersYesterday(int userID) {
 		ResultSet resultSet =  Connexion.getInstance()
-		.query("Select * from marquer where DATEDIFF(NOW(),dateofadd)=0 AND userid = "
+		.query("Select * from MARQUER where DATEDIFF(NOW(),dateofadd)=0 AND userid = "
 				+ userID);
 		if (resultSet == null)
 			return null;

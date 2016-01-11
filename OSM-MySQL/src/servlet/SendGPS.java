@@ -19,10 +19,11 @@ import org.json.simple.parser.ParseException;
 import server.Server;
 import server.ServerClient;
 import server.ServerServer;
-import sqlite.controller.DBManager;
 import utils.ConfigUtils;
 import utils.PayloadUtils;
 import constants.Urls;
+
+import database.controller.DBManager;
 
 /**
  * Servlet implementation class SendGPS
@@ -45,7 +46,7 @@ public class SendGPS extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		System.out.println("Get");
+		Urls.IP = request.getLocalAddr();
 		response.getWriter().append("Served at: ").append(request.getContextPath());
 	}
 
@@ -55,7 +56,8 @@ public class SendGPS extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		System.out.println("Post");
+		Urls.IP = request.getLocalAddr();
+		System.out.println(Urls.IP);
 		try {
 			String payloadString = "";
 			// 1. get received JSON data from request
@@ -87,18 +89,14 @@ public class SendGPS extends HttpServlet {
 				if (servers.size() == 1 && ServerClient.isInCharge(servers)) {
 					response.setStatus(HttpServletResponse.SC_OK);
 					// TODO Verify
-					System.out.println("before");
 					if (dbManager.addData(payload.getId(), payload.getLon(), payload.getLat())) jsonResponse.put("code", 0);
 					else jsonResponse.put("code", -1);
-					System.out.println("after");
 					
 
 				} else if (ServerClient.isInCharge(servers)) {
 					JSONParser jsonParser = new JSONParser();
 					ServerServer.notifyAdd((JSONObject) jsonParser.parse(payloadString), servers);
-					System.out.println("before");
 					dbManager.addData(payload.getId(), payload.getLon(), payload.getLat());
-					System.out.println("before");
 					response.setStatus(HttpServletResponse.SC_OK);
 					jsonResponse.put("code", 0);
 				} else if (servers.size()>0) {
@@ -120,9 +118,7 @@ public class SendGPS extends HttpServlet {
 				if (ServerClient.isInCharge(servers)) {
 					response.setStatus(HttpServletResponse.SC_OK);
 					// TODO Add to database
-					System.out.println("before");
 					dbManager.addData(payload.getId(), payload.getLon(), payload.getLat());
-					System.out.println("before");
 					jsonResponse.put("code", 0);
 				}
 			}

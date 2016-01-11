@@ -31,7 +31,9 @@
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/jna-platform-4.1.0.jar"/>
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/json-simple-1.1.1.jar"/>
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/jsp-api.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/mysql-connector-java-5.1.38-bin.jar"/>
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/servlet-api.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/sqlite-jdbc-3.8.11.2.jar"/>
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/tomcat-api.jar"/>
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/tomcat-coyote.jar"/>
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/tomcat-dbcp.jar"/>
@@ -42,8 +44,5 @@
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/tomcat-util.jar"/>
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/tomcat7-websocket.jar"/>
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/websocket-api.jar"/>
-	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/sqlite-jdbc-3.8.11.2.jar"/>
-	<classpathentry kind="lib" path="/home/rhost/Documents/josm/OSM-MySQL/WebContent/WEB-INF/lib/mysql-connector-java-5.1.38-bin.jar"/>
-	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/mysql-connector-java-5.1.38-bin.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>

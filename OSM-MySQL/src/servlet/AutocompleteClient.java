@@ -15,7 +15,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.json.simple.JSONArray;
 
-import sqlite.controller.DBManager;
+
+import database.controller.DBManager;
 
 /**
  * Servlet implementation class autocompleteClient

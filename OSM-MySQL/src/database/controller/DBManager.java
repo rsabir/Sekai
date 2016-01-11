@@ -24,7 +24,7 @@ public class DBManager {
     private UserDAO userDAO = null;
     private NodeDAO nodeDAO = null;
     
-    public DBManager(){
+    public DBManager(String serverName){
         userDAO = new UserDAO();
         nodeDAO = new NodeDAO();    
         marquerDAO = new MarquerDAO();

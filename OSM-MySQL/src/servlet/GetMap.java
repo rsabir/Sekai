@@ -20,6 +20,8 @@ import org.json.simple.JSONValue;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
+import constants.Urls;
+
 /**
  * Servlet implementation class getMap
  */
@@ -38,6 +40,9 @@ public class GetMap extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		if (Urls.IP.equals("0.0.0.0")){
+			Urls.IP = request.getLocalAddr();
+		}
 		String redirectUrl = "/getMap.jsp";
 		RequestDispatcher rd = request.getRequestDispatcher(redirectUrl);
 		rd.forward(request, response);

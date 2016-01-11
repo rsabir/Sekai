@@ -5,7 +5,7 @@
 	<%@ page import="constants.Urls" %>
 	<%@ page import="java.util.ArrayList" %>
     <%
-	String configString = ConfigUtils.getConfig(Urls.CONFIGSERVER);
+	String configString = ConfigUtils.getConfig();
 	ArrayList<ArrayList<Object>> configList = ConfigUtils.parse(configString);
 	Server.refresh(configList);
 	%>
@@ -25,6 +25,7 @@
 		 	body{
 		 		margin:0;
 		 		position:relative;
+		 		overflow:hidden;
 		 	}
 		 	h1{
 		 		color:white;
@@ -168,6 +169,10 @@
 	});
 	map.fitBounds(bounds);
 	
+// 	L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6IjZjNmRjNzk3ZmE2MTcwOTEwMGY0MzU3YjUzOWFmNWZhIn0.Y8bhBaUMqFiPrDRW9hieoQ', {
+// 		maxZoom: 18,
+// 		id: 'mapbox.streets'
+// 	}).addTo(map);
 	L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6IjZjNmRjNzk3ZmE2MTcwOTEwMGY0MzU3YjUzOWFmNWZhIn0.Y8bhBaUMqFiPrDRW9hieoQ', {
 		maxZoom: 18,
 		id: 'mapbox.streets'
@@ -254,7 +259,7 @@
 
 		var timer = setInterval(function(){
 			setMarkers(all,varGlobClient);
-		}, 100);
+		}, 1000);
 		
 		$("#input_client").autocomplete({
 	        source: function(request,response){

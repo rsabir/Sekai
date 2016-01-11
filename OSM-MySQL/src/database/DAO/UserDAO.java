@@ -18,7 +18,7 @@ public class UserDAO {
 
     public ArrayList<String> getMacAddressList(){
 		ArrayList<String> result = new ArrayList<String>();
-			ResultSet rs =  Connexion.getInstance().query("select MACADDR from User");
+			ResultSet rs =  Connexion.getInstance().query("select MACADDR from USER");
 			if (rs != null) {
 				try {
 					while (rs.next()) {
@@ -64,10 +64,10 @@ public class UserDAO {
 		//prepare the insertion statement
 		String insertStatement = new String();
 		if (name == null) {
-			insertStatement = "INSERT INTO User(MACADDR)\n" + "Values (\""
+			insertStatement = "INSERT INTO USER(MACADDR)\n" + "Values (\""
 					+ MAC + "\");";
 		} else {
-			insertStatement = "INSERT INTO User(NAME,MACADDR)\n" + "Values (\""
+			insertStatement = "INSERT INTO USER(NAME,MACADDR)\n" + "Values (\""
 					+ name + "\",\"" + MAC + "\");";
 		}
 		// execute the statement

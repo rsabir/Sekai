@@ -16,6 +16,9 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
+import constants.PathsC;
+import constants.Urls;
+
 /**
  * Servlet implementation class Config
  */
@@ -36,7 +39,7 @@ public class Config extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		String path = getServletContext().getRealPath(File.separator+"WEB-INF"+File.separator+"config.json");
+		String path = PathsC.PATHCONFIGJSON;
 		String jsonString = readFile( path ); 
 		//"{\"servers\":["+
 //	             "{"+

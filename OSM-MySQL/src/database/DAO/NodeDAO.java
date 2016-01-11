@@ -44,7 +44,7 @@ public class NodeDAO {
 	}
 	public ArrayList<Node> getAllNodes() {
 		ArrayList<Node> result=new ArrayList<Node>();
-    	ResultSet rs=  Connexion.getInstance().query("select * from Node");
+    	ResultSet rs=  Connexion.getInstance().query("select * from NODE");
     	if (rs==null) return null;
         try {
         	while (rs.next()) {
@@ -61,7 +61,7 @@ public class NodeDAO {
 		return result;
 	}
 	public Node getNodeByID(int nodeID) {
-    	ResultSet rs=  Connexion.getInstance().query("select * from Node where ID="+nodeID);
+    	ResultSet rs=  Connexion.getInstance().query("select * from NODE where ID="+nodeID);
     	Node result = null;
     	if (rs==null) return null;
     	try {

@@ -19,7 +19,8 @@ import org.json.simple.parser.ParseException;
 
 import constants.Urls;
 
-import sqlite.controller.DBManager;
+
+import database.controller.DBManager;
 
 /**
  * Servlet implementation class GetCLients

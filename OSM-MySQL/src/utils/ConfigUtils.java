@@ -8,8 +8,13 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
+import constants.Urls;
+
 public class ConfigUtils {
 	
+	public static String getConfig() throws ParseException, IOException{
+		return getConfig(Urls.CONFIGSERVER);
+	}
 	public static String getConfig(String url) throws ParseException, IOException{	
 		String response = HttpSendRequest.sendGET(url);
 		return response;

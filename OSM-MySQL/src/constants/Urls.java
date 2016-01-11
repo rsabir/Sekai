@@ -1,6 +1,6 @@
 package constants;
 
 public class Urls {
-	public static String IP="172.20.0.43";
-	public static final String CONFIGSERVER = "http://172.20.0.43:8080/Config";
+	public static String IP="0.0.0.0";
+	public static String CONFIGSERVER = "http://localhost:8080/Config";
 }
