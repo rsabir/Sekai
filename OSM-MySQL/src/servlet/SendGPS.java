@@ -57,7 +57,6 @@ public class SendGPS extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		Urls.IP = request.getLocalAddr();
-		System.out.println(Urls.IP);
 		try {
 			String payloadString = "";
 			// 1. get received JSON data from request

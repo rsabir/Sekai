@@ -4,11 +4,7 @@
 	<%@ page import="utils.ConfigUtils" %>
 	<%@ page import="constants.Urls" %>
 	<%@ page import="java.util.ArrayList" %>
-    <%
-	String configString = ConfigUtils.getConfig();
-	ArrayList<ArrayList<Object>> configList = ConfigUtils.parse(configString);
-	Server.refresh(configList);
-	%>
+  
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 	<html>
 	<head>
@@ -137,6 +133,19 @@
 				border-top-right-radius: 5px;
 				font-family: "Open Sans",sans-serif;
 		 	}
+		 	#error{
+		 		display:none;
+		 		background:rgba(0,0,0,0.5);
+		 		width : 70%;
+		 		padding-top:10px;
+		 		padding-bottom:10px;
+		 		position:fixed;
+		 		top:50%;
+		 		left:50%;
+		 		text-align:center;
+		 		color:white;
+				transform: translate(-50%,-50%);
+			}
 		 </style>
 		<title>The Map</title>
 	</head>
@@ -147,36 +156,56 @@
 	<script type="text/javascript" src="js/jquery.min.js"></script>
 	<script type="text/javascript" src="js/jquery-ui.min.js"></script>
 	<script>
-	var minLat = <% out.print(Server.getMinLat());%>
-	var minLgn = <% out.print(Server.getMinLgn());%>
-	var maxLat = <% out.print(Server.getMaxLat());%>
-	var maxLgn = <% out.print(Server.getMaxLgn());%>
-	
+	var minLat;
+	var minLgn;
+	var maxLat;
+	var maxLgn;
+	var map;
+	$.get("/GetLatLgn",function(data){
+		if (data.code==0){
+			minLat = data.minLat;
+			minLgn = data.minLgn;
+			maxLat = data.maxLat;
+			maxLgn = data.maxLgn;
+			var southWest = L.latLng(minLat,minLgn ),
+		    northEast = L.latLng(maxLat,maxLgn),
+		    bounds = L.latLngBounds( southWest,northEast);
+			map = L.map('map',{
+				maxBounds : bounds,
+				center: [(minLat+maxLat)/2, (minLgn+maxLgn)/2],
+			    zoom: 15,
+			    minZoom:13
+			});
+			map.fitBounds(bounds);
+			L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6IjZjNmRjNzk3ZmE2MTcwOTEwMGY0MzU3YjUzOWFmNWZhIn0.Y8bhBaUMqFiPrDRW9hieoQ', {
+				maxZoom: 18,
+				id: 'mapbox.streets'
+			}).addTo(map);
+
+		 	L.polygon([
+		 		[minLat,minLgn ],
+		 		[minLat,maxLgn ],
+		 		[maxLat,maxLgn],
+		 		[maxLat,minLgn ]
+				
+		 	],{
+		 		 fillOpacity: 0
+		 	}).addTo(map);
+		}else{
+			$("#error").show();
+		}
+	},"json");
 	var varGlobClient = [];
 	var optionSelected=0;	
 	var all=1;
 	
 	var divNoClient = $("div#noclient");
 	
-	var southWest = L.latLng(minLat,minLgn ),
-    northEast = L.latLng(maxLat,maxLgn),
-    bounds = L.latLngBounds( southWest,northEast);
-	var map = L.map('map',{
-		maxBounds : bounds,
-		center: [(minLat+maxLat)/2, (minLgn+maxLgn)/2],
-	    zoom: 15,
-	    minZoom:13
-	});
-	map.fitBounds(bounds);
 	
 // 	L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6IjZjNmRjNzk3ZmE2MTcwOTEwMGY0MzU3YjUzOWFmNWZhIn0.Y8bhBaUMqFiPrDRW9hieoQ', {
 // 		maxZoom: 18,
 // 		id: 'mapbox.streets'
 // 	}).addTo(map);
-	L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6IjZjNmRjNzk3ZmE2MTcwOTEwMGY0MzU3YjUzOWFmNWZhIn0.Y8bhBaUMqFiPrDRW9hieoQ', {
-		maxZoom: 18,
-		id: 'mapbox.streets'
-	}).addTo(map);
 	var markers = [];
 	var listLatlgn = [];
 	var polyline;
@@ -218,7 +247,7 @@
 					}, 6000);
 				}
 			},"json").fail(function() {
-			    alert( "error" );
+			  
 			  });
 		}else{
 			$.post("GetHistory",{
@@ -350,17 +379,6 @@
 // 		fillOpacity: 0.5
 // 	}).addTo(map).bindPopup("I am a circle.");
 
- 	L.polygon([
- 		[minLat,minLgn ],
- 		[minLat,maxLgn ],
- 		[maxLat,maxLgn],
- 		[maxLat,minLgn ]
-		
- 	],{
- 		 fillOpacity: 0
- 	}).addTo(map);
-
-
 	var popup = L.popup();
 
 	function onMapClick(e) {
@@ -378,5 +396,6 @@
 			<div class="text">No current client available in the server</div>
 		</div>
 	</div>
+	<div id="error">Error in settings : The url of configuration is not good</div>
 	</body>
 </html>

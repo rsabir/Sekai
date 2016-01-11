@@ -70,7 +70,10 @@ $(document).ready(function() {
     		        $login.addClass("inactive");
     		        animating = false;
     		        $(that).removeClass("success processing");
-    		      }, submitPhase2);		
+    		      }, submitPhase2);
+    		      setTimeout(function() {
+    		    	  location.reload();
+    		      }, submitPhase2+2000);
     		}
     	},"json");
       
