@@ -35,18 +35,19 @@ First you have to start mysql then tomcat. After that, you have to acces the ser
 ```javascript
 {"servers":
 	[
-			{
-					"host":"172.20.0.43",
-					            "zone":	{
-									"maxlat":44.8448769,
-											"minlat":44.8305549,
-											                "maxlon":-0.5275520000000142,
-													                "minlon":-0.6563579999999547
-															                }
-																	        },{"host": "172.20.0.44"
-																		        [...]
-																			```
-																			Then you can make general settings, like which server will be asked for the *config.json*, the configuration of the **mysql**, by accessing the url */Settings*.
+         {
+	    "host":"172.20.0.43",
+	    "zone":{
+		"maxlat":44.8448769,
+		"minlat":44.8305549,
+		"maxlon":-0.5275520000000142,
+		"minlon":-0.6563579999999547
+	    }
+	 },{"host": "172.20.0.44"
+	    [...]
+```
+
+Then you can make general settings, like which server will be asked for the *config.json*, the configuration of the **mysql**, by accessing the url */Settings*.
 
 You can also make all this configurations by changing **config.json** and **setting.json** in */opt/sekai/*.
 
@@ -54,22 +55,18 @@ You can also make all this configurations by changing **config.json** and **sett
 To test the server you have to send queries in */SendGPS* with this format:
 ```javascript
 {
-"client":
-  {"ID" : "value",
-     "Position" :
-             {
-	              "lat" : x
-		               "lon" : y
-			                }
-					  }
-					   "isServer" : false
-					   }
-					   ```
-					   Here's a small command that will do the work job for testing :
-					   ```
-					   curl -H "Content-Type: application/json" -X POST -d '{ "client": {"ID" : "MAC_A\
-DRESS","Position" : {"lat" :44.8345549 ,"lon" : -0.53 }}"isServer" : false}' ht\
-tp://172.20.0.43:8080/SendGPS
+	"client":{
+		"ID" : "value",
+		"Position" : {	
+			   "lat" : x,
+			   "lon" : y
+	        }
+	},"isServer" : false
+}
+```
+Here's a small command that will do the work job for testing :
+```
+curl -H "Content-Type: application/json" -X POST -d '{ "client": {"ID" : "MAC_ADRESS","Position" : {"lat" :44.8345549 ,"lon" : -0.53 }}"isServer" : false}' http://172.20.0.43:8080/SendGPS
 
 ```
 
