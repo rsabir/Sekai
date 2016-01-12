@@ -4,7 +4,7 @@ Sekai is a distributed geolocalisation system base on OSM. It's compatible with 
 You will find in this git all the sources of the server Sekai. There's two versions of Sekai :
 
  * OSM-Mysql : stable version which use Mysql
-  * OSM : deprecated one, use SQLite
+ * OSM : deprecated one, use SQLite
 
 You can find the sources and wars (bin) Sekai Client and server in google drive:
  https://drive.google.com/folderview?id=0BywXTC21h2yVa0M3UTJoUnpFZHM&usp=sharing
@@ -31,7 +31,7 @@ Then you have to run the install.sh with ***root***
 
 ## How to use Sekai
 ### Configuration
-First you have to start mysql then tomcat. After that, you have to acces the server whith his ip (private one or the public one) so he can know what's its ip. So as an example, you have to put : http://172.20.1.1:8080/GetMap. This url */GetMap* is used to see the map and the clients available in the server. Then you have you configure the config.json by accessing the url */SetConfig*. This json represent each server and the domain (area) that it control. The json have to be in this format:
+First you have to start mysql then tomcat. After that, you have to acces the server whith his ip (private one or the public one) so he can know its ip. So as an example, you have to put : http://172.20.1.1:8080/GetMap. This url */GetMap* is used to see the map and the clients available in the server. Then you have you configure the config.json by accessing the url */SetConfig*. This json represent each server and the domain (area) that it control. The json have to be in this format:
 ```javascript
 {"servers":
 	[
@@ -64,7 +64,7 @@ To test the server you have to send queries in */SendGPS* with this format:
 	},"isServer" : false
 }
 ```
-Here's a small command that will do the work job for testing :
+Here's a small command that will do the job:
 ```
 curl -H "Content-Type: application/json" -X POST -d '{ "client": {"ID" : "MAC_ADRESS","Position" : {"lat" :44.8345549 ,"lon" : -0.53 }}"isServer" : false}' http://172.20.0.43:8080/SendGPS
 
@@ -73,4 +73,9 @@ curl -H "Content-Type: application/json" -X POST -d '{ "client": {"ID" : "MAC_AD
 You can also test with our clients that you can find in the drive.
 
 ### More Details
-For more detail, please read our doc under the document folder or send us a mail at sabiretude@gmail.com
+For more detail, please read our doc under the document folder or send us a mail at sabiretude At gmail.com
+
+### TODO:
+* Improve the security of communication with servers
+* Build a mechanism to stop client from DDOS
+* Add authentication when accessing */Settings* and */SetConfig*
