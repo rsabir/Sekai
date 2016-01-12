@@ -15,11 +15,6 @@ html, body {
   }
 }
 
-
-
-
-
-
 .cont {
   position: relative;
   height: 100%;
@@ -180,12 +175,10 @@ svg {
 .app.active {
   opacity: 1;
   }
-
-
 .form  {
   margin: auto auto;
   position: fixed;
-  top: 20%;
+  bottom: -12px;
   left: 50%;
   -moz-transform: translate3d(-50%, 0, 0);
   -ms-transform: translate3d(-50%, 0, 0);

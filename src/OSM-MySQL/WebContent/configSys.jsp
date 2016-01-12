@@ -12,7 +12,7 @@
 <link rel='stylesheet prefetch'
 	href='http://fonts.googleapis.com/css?family=Open+Sans'>
 
-<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/setConfig.css">
 <style>
 	div.app{
 		position:absolute;
