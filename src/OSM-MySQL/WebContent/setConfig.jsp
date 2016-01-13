@@ -62,8 +62,7 @@
    });</script> -->
   <script>
   	$.get("/Config",function(data){
-  		$("textarea").val(JSON.stringify(JSON.parse(data)),null,4);
-  		//$("textarea").val(JSON.stringify(JSON.parse($("textarea").val()),null,4));
+  		$("textarea").val(JSON.stringify(data,null,'\t'));
   	},"json");
   	$("textarea").change(function(){
   		$("#error").hide();

@@ -21,6 +21,7 @@ import constants.Urls;
 
 
 import database.controller.DBManager;
+import utils.TmpClients;
 
 /**
  * Servlet implementation class GetCLients
@@ -67,21 +68,24 @@ public class GetClients extends HttpServlet {
 		
 	}
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		TmpClients.getInstance();
 		JSONObject jsonResponse = new JSONObject();
 		JSONParser jsonParser = new JSONParser();
 		request.setCharacterEncoding("utf8");
 		response.setContentType("application/json");
 		String all = request.getParameter("all");
-		LinkedList<Map<String, Comparable>> clientList=
+		LinkedList<Map<String, Object>> clientList=
 			new LinkedList();
 		if (all.equals("1")){
-			clientList=dbManager.getAllData();
+			//clientList=dbManager.getAllData();
+			clientList = TmpClients.getRecentClientsList();
 			if (clientList==null)
 				returnError(jsonResponse, jsonParser, response); //
 		}else{
 			String client= request.getParameter("client");
-			clientList=new LinkedList<Map<String, Comparable>>();
-			clientList.add(dbManager.getClientData(client));
+			clientList=new LinkedList<Map<String, Object>>();
+			//clientList.add(dbManager.getClientData(client));
+			clientList.add(TmpClients.getRecentClientList(client));
 			//System.out.println(clientList);
 			if (clientList==null)
 				returnError(jsonResponse, jsonParser, response); //; 

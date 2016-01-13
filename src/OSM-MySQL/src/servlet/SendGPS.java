@@ -21,6 +21,7 @@ import server.ServerClient;
 import server.ServerServer;
 import utils.ConfigUtils;
 import utils.PayloadUtils;
+import utils.TmpClients;
 import constants.Urls;
 
 import database.controller.DBManager;
@@ -57,6 +58,7 @@ public class SendGPS extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		Urls.IP = request.getLocalAddr();
+		TmpClients.getInstance();
 		try {
 			String payloadString = "";
 			// 1. get received JSON data from request
@@ -86,16 +88,23 @@ public class SendGPS extends HttpServlet {
 			JSONObject jsonResponse = new JSONObject();
 			if (!payload.isServer()) {
 				if (servers.size() == 1 && ServerClient.isInCharge(servers)) {
-					response.setStatus(HttpServletResponse.SC_OK);
 					// TODO Verify
-					if (dbManager.addData(payload.getId(), payload.getLon(), payload.getLat())) jsonResponse.put("code", 0);
-					else jsonResponse.put("code", -1);
+					if (dbManager.addData(payload.getId(), payload.getLon(), payload.getLat())){
+						TmpClients.addRecentClient(payload);
+						jsonResponse.put("code", 0);
+						response.setStatus(HttpServletResponse.SC_OK);
+					}
+					else{
+						jsonResponse.put("code", -1);
+						response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+					}
 					
 
 				} else if (ServerClient.isInCharge(servers)) {
 					JSONParser jsonParser = new JSONParser();
 					ServerServer.notifyAdd((JSONObject) jsonParser.parse(payloadString), servers);
 					dbManager.addData(payload.getId(), payload.getLon(), payload.getLat());
+					TmpClients.addRecentClient(payload);
 					response.setStatus(HttpServletResponse.SC_OK);
 					jsonResponse.put("code", 0);
 				} else if (servers.size()>0) {
@@ -116,8 +125,8 @@ public class SendGPS extends HttpServlet {
 			}else{
 				if (ServerClient.isInCharge(servers)) {
 					response.setStatus(HttpServletResponse.SC_OK);
-					// TODO Add to database
 					dbManager.addData(payload.getId(), payload.getLon(), payload.getLat());
+					TmpClients.addRecentClient(payload);
 					jsonResponse.put("code", 0);
 				}
 			}
@@ -126,11 +135,8 @@ public class SendGPS extends HttpServlet {
 			
 
 		} catch (ParseException e) {
-			e.printStackTrace();
-			response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 		}
-
-		// doGet(request, response);
 	}
 
 }

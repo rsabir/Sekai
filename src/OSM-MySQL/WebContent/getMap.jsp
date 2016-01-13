@@ -263,7 +263,7 @@
 
 		var timer = setInterval(function(){
 			setMarkers(all,varGlobClient);
-		}, 1000);
+		}, 100);
 		
 		$("#input_client").autocomplete({
 	        source: function(request,response){
@@ -375,7 +375,7 @@
 				maxBounds : bounds,
 				center: [(minLat+maxLat)/2, (minLgn+maxLgn)/2],
 			    zoom: 15,
-			    minZoom:13
+			    minZoom:1
 			});
 			map.fitBounds(bounds);
 			L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6IjZjNmRjNzk3ZmE2MTcwOTEwMGY0MzU3YjUzOWFmNWZhIn0.Y8bhBaUMqFiPrDRW9hieoQ', {
