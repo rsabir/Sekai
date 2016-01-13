@@ -79,3 +79,4 @@ For more detail, please read our doc under the document folder or send us a mail
 * Improve the security of communication with servers
 * Build a mechanism to stop client from DDOS
 * Add authentication when accessing */Settings* and */SetConfig*
+* 
