@@ -8,6 +8,9 @@ You will find in this git all the sources of the server Sekai. There's two versi
 
 You can find the sources and wars (bin) Sekai Client and server in google drive:
  https://drive.google.com/folderview?id=0BywXTC21h2yVa0M3UTJoUnpFZHM&usp=sharing
+ 
+ The link to the client's github repository:
+ https://github.com/ZakariaHili/JOSM
 
 ***The sekai servers are open source and are all liscenced in MIT Liscence, which means you can use it freely and without restriction. We will be very glad to receive your contribution.***
 
@@ -70,7 +73,8 @@ curl -H "Content-Type: application/json" -X POST -d '{ "client": {"ID" : "MAC_AD
 
 ```
 
-You can also test with our clients that you can find in the drive.
+You can also test with our clients that you can find in the git :
+>https://github.com/ZakariaHili/JOSM/
 
 ### More Details
 For more detail, please read our doc under the document folder or send us a mail at sabiretude At gmail.com
@@ -79,4 +83,3 @@ For more detail, please read our doc under the document folder or send us a mail
 * Improve the security of communication with servers
 * Build a mechanism to stop client from DDOS
 * Add authentication when accessing */Settings* and */SetConfig*
-* 
