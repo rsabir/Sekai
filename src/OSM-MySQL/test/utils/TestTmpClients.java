@@ -4,6 +4,8 @@ import static org.junit.Assert.*;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.LinkedList;
+import java.util.Map;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -26,8 +28,16 @@ public class TestTmpClients {
 	@Test
 	public void testgetRecentClient() {
 		tmpClients.getInstance().addRecentClient(new Client("a",3.2,4.5,new Date()));
-		tmpClients.addRecentClient(new Client("b",3.2,4.6,new Date()));
 		ArrayList<Client> clients = tmpClients.getRecentClients();
+		assert (clients.size()==1);
+		tmpClients.addRecentClient(new Client("b",3.2,4.6,new Date()));
+		clients = tmpClients.getRecentClients();
+		assert (clients.size()==2);
+		clients = tmpClients.getRecentClients();
+		assert (clients.size()==2);
+		clients = tmpClients.getRecentClients();
+		assert (clients.size()==2);
+		clients = tmpClients.getRecentClients();
 		assert (clients.size()==2);
 		Client client0 = clients.get(0);
 		Client client1 = clients.get(0);
@@ -50,5 +60,20 @@ public class TestTmpClients {
 		assert(tmpClients.getSize() == 20+2);
 	}
 	
+	@Test
+	public void testgetRecentList() {
+		tmpClients.getInstance().addRecentClient(new Client("a",3.2,4.5,new Date()));
+		LinkedList<Map<String, Object>> clients = tmpClients.getRecentClientsList();
+		assert (clients.size()==1);
+		tmpClients.addRecentClient(new Client("b",3.2,4.6,new Date()));
+		clients = tmpClients.getRecentClientsList();
+		assert (clients.size()==2);
+		clients = tmpClients.getRecentClientsList();
+		assert (clients.size()==2);
+		clients = tmpClients.getRecentClientsList();
+		assert (clients.size()==2);
+		clients = tmpClients.getRecentClientsList();
+		assert (clients.size()==2);
+	}
 
 }
