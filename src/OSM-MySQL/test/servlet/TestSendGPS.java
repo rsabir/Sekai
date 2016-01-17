@@ -16,11 +16,13 @@ public class TestSendGPS {
 		TestServerServer.before();
 		String jsonString = TestServerServer.payload;
 		JSONParser jsonParser = new JSONParser();
+		/*
 		try {
 			HttpSendRequest.sendPost("http://localhost:8080/OSM/SendGPS",(JSONObject)jsonParser.parse(jsonString));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		*/
 	}
 
 }

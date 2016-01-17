@@ -4,6 +4,8 @@ import static org.junit.Assert.*;
 
 import org.json.simple.parser.ParseException;
 import org.junit.Test;
+import utils.PayloadUtils;
+import utils.GPS;
 
 public class TestPayloadUtils {
 
@@ -14,18 +16,18 @@ public class TestPayloadUtils {
 				   "\"Position\" : "+
 				    "    {\"lat\" : 26"+
 				     "    \"lon\" : 22}"+
-				  "}"+
+				  "},"+
 				 "\"isServer\" : true"+
 				"}";
 		PayloadUtils payloadUtils;
 		try {
 			payloadUtils = new PayloadUtils(payload);
-			assert(payloadUtils.getLon()==22);
 			assert(payloadUtils.getLat()==26);
+			assert(payloadUtils.getLon()==22);
 			assert(payloadUtils.isServer()==true);
-			float[] gps = {22,26};
-			float[] gpsJSON = payloadUtils.getGps();
-			assert( gps[0]==gpsJSON[0] && gps[1]==gpsJSON[1] );
+			GPS gps = new GPS(26,22);
+			GPS gpsJSON = payloadUtils.getGps();
+			assert( gps.getLat()==gpsJSON.getLat() && gps.getLon()==gps.getLon() );
 		} catch (ParseException e) {
 			e.printStackTrace();
 			assert(false);

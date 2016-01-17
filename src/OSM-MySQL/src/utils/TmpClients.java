@@ -100,5 +100,10 @@ public class TmpClients {
 	public static int getSize(){
 		return clients.size();
 	}
+	
+	public static void clean(){
+		TmpClients.memory=new Hashtable<String,Client>();
+		TmpClients.clients = new ArrayList<String>();
+	}
 }
 

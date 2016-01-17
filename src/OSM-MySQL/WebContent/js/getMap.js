@@ -4,6 +4,7 @@
 	var maxLgn;
 	var map;
 	var polyline;
+	var popup;
 	var varGlobClient = [];
 	var optionSelected=0;	
 	var all=1;
@@ -113,7 +114,7 @@
 	function onMapClick(e) {
 		popup
 			.setLatLng(e.latlng)
-			.setContent("You clicked the map at " + e.latlng.toString())
+			.setContent("Lat,Lon: " + e.latlng.toString())
  			.openOn(map);
  	}
 	
@@ -148,7 +149,7 @@
 		 	],{
 		 		 fillOpacity: 0
 		 	}).addTo(map);
-			var popup = L.popup();
+			popup = L.popup();
 		}else{
 			$("#error").show();
 		}

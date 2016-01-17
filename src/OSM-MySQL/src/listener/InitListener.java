@@ -66,8 +66,6 @@ public class InitListener implements ServletContextListener {
 	}
 	
 	
-
-	@Override
 	public void contextDestroyed(ServletContextEvent arg0) {
 		// TODO Auto-generated method stub
 		if (conn != null) {
@@ -79,7 +77,6 @@ public class InitListener implements ServletContextListener {
 		conn = null; // prevent any future access
 	}
 
-	@Override
 	public void contextInitialized(ServletContextEvent event) {
 		
 		if (testMySQL(Mysql.PORT)) {

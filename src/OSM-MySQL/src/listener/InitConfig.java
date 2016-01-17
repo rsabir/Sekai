@@ -46,11 +46,9 @@ public class InitConfig implements ServletContextListener {
 			}
 
 	
-		@Override
-	public void contextDestroyed(ServletContextEvent arg0) {
+		public void contextDestroyed(ServletContextEvent arg0) {
 	}
 
-	@Override
 	public void contextInitialized(ServletContextEvent event) {
 		String configPath = PathsC.PATHCONFIGJSON;
 		Path p = Paths.get(configPath);

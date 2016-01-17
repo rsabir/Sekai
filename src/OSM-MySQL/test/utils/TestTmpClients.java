@@ -7,6 +7,7 @@ import java.util.Date;
 import java.util.LinkedList;
 import java.util.Map;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -18,9 +19,14 @@ public class TestTmpClients {
 		tmpClients = TmpClients.getInstance(); 
 	}
 	
+	@After
+	public void afterTest(){
+		tmpClients.clean();
+	}
+	
 	@Test
 	public void testaddRecentClient() {
-		tmpClients.getInstance().addRecentClient(new Client("a",3.2,4.5,new Date()));
+		TmpClients.addRecentClient(new Client("a",3.2,4.5,new Date()));
 		tmpClients.addRecentClient(new Client("b",3.2,4.6,new Date()));
 		assert (tmpClients.getSize()==2);
 	}
@@ -40,9 +46,11 @@ public class TestTmpClients {
 		clients = tmpClients.getRecentClients();
 		assert (clients.size()==2);
 		Client client0 = clients.get(0);
-		Client client1 = clients.get(0);
-		assert(client0.getLat()==3.2 || client1.getLat()==3.2 );
+		Client client1 = clients.get(1);
+		assert(client0.getLat()==3.2 && client1.getLat()==3.2 );
 		if (client0.getId() == "a"){
+			System.out.println(client1.getLon());
+			System.out.println(client0.getLon());
 			assert(client0.getLon()==4.5);
 			assert(client1.getLon()==4.6);
 		}else{

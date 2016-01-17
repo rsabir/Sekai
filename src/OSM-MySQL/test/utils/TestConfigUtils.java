@@ -50,33 +50,23 @@ public class TestConfigUtils {
 	public void testParse() {
 		ArrayList<ArrayList<Object>> result = ConfigUtils.parse(jsonString);
 		assert(result.size()==3);
-		/*assert((int)result.get(0).get(0)==30);
-		assert((int)result.get(0).get(1)==0);
-		assert((int)result.get(0).get(2)==40);
-		assert((int)result.get(0).get(3)==20);
-		assert ( ( (String) result.get(0).get(4) ).equals("1.2.3.4") );
-		assert((int)result.get(1).get(0)==100);
-		assert((int)result.get(1).get(1)==30);
-		assert((int)result.get(1).get(2)==20);
-		assert((int)result.get(1).get(3)==0);
-		assert ( ( (String) result.get(1).get(4) ).equals("1.2.3.5") );		*/
 	}
 
 	@Test
 	public void testFindResponsibleServer(){
 		ArrayList<ArrayList<Object>> result = ConfigUtils.parse(jsonString);
-		float[] gps = {1,21};
+		GPS gps = new GPS(1,21);
 		assert(ConfigUtils.findResponsibleServer(gps, result).size()==1);
 		assert(ConfigUtils.findResponsibleServer(gps, result).get(0).equals("1.2.3.4"));
-		gps[1] = 1;
+		gps = new GPS(1,1);
 		assert(ConfigUtils.findResponsibleServer(gps, result).size()==0);
-		gps[0]=35;gps[1]=12;
+		gps = new GPS(35,12);
 		assert(ConfigUtils.findResponsibleServer(gps, result).size()==1);
 		assert(ConfigUtils.findResponsibleServer(gps, result).get(0).equals("1.2.3.5"));
-		gps[0]=26;gps[1]=22;
+		gps = new GPS(26,22);
 		assert(ConfigUtils.findResponsibleServer(gps, result).size()==2);
 		assert(ConfigUtils.findResponsibleServer(gps, result).get(0).equals("1.2.3.4"));
-		assert(ConfigUtils.findResponsibleServer(gps, result).get(0).equals("1.2.3.6"));
+		assert(ConfigUtils.findResponsibleServer(gps, result).get(1).equals("1.2.3.6"));
 	}	
 
 }

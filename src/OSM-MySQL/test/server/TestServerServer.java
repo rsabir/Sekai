@@ -11,11 +11,12 @@ import org.junit.Before;
 import org.junit.Test;
 
 import utils.ConfigUtils;
+import utils.GPS;
 
 public class TestServerServer {
 
 	public static String payload;
-	static float[] gps;
+	static GPS gps;
 	
 	
 	public static void before(){
@@ -28,8 +29,7 @@ public class TestServerServer {
 		  "}"+
 		 "\"isServer\" : true"+
 		"}";
-		gps = new float[2];
-		gps[0]=26;gps[1]=22;
+		gps = new GPS(26,22);
 		
 	}
 	

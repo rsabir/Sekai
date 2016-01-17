@@ -71,7 +71,6 @@ public class GetLatLgn extends HttpServlet {
 	    }
 
 	class Task implements Callable<String> {
-	    @Override
 	    public String call() throws Exception {
 	    	String configString;
 			try {

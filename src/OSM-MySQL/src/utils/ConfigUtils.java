@@ -59,12 +59,12 @@ public class ConfigUtils {
 	 * @param config l'ArrayList retourné par la fonction parse
 	 * @return ArrayList contenant tout les ip des serveurs reponsables du point
 	 */
-	public static ArrayList<String> findResponsibleServer(float[]gps,ArrayList<ArrayList<Object>> config){
+	public static ArrayList<String> findResponsibleServer(GPS gps,ArrayList<ArrayList<Object>> config){
 		ArrayList<String> result = new ArrayList<String>();
 		for (int i=0; i<config.size(); i++){
 			ArrayList<Object> tmp = config.get(i);
-			if (gps[0]>Float.parseFloat(tmp.get(0).toString()) || gps[0]<Float.parseFloat(tmp.get(1).toString())  || 
-					gps[1]>Float.parseFloat(tmp.get(2).toString())  || gps[1]<Float.parseFloat(tmp.get(3).toString()) )
+			if (gps.getLat()>Float.parseFloat(tmp.get(0).toString()) || gps.getLat()<Float.parseFloat(tmp.get(1).toString())  || 
+					gps.getLon()>Float.parseFloat(tmp.get(2).toString())  || gps.getLon()<Float.parseFloat(tmp.get(3).toString()) )
 				continue;
 			result.add(tmp.get(4).toString());
 		}
