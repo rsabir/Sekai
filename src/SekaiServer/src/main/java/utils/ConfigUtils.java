@@ -1,0 +1,74 @@
+package utils;
+
+import java.io.IOException;
+import java.util.ArrayList;
+
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
+
+import constants.Urls;
+
+public class ConfigUtils {
+	
+	public static String getConfig() throws ParseException, IOException{
+		return getConfig(Urls.CONFIGSERVER);
+	}
+	public static String getConfig(String url) throws ParseException, IOException{	
+		String response = HttpSendRequest.sendGET(url);
+		return response;
+		
+		// TestConfigUtils.before();
+		// return TestConfigUtils.jsonString;
+	}
+	/**
+	 * 
+	 * @param configJson le configuration en json mode string  
+	 * @return ArrayList composé ainsi :
+	 * [ [23,   22,   0.3,    0.1,  "192.169.1.2"] , [...] ]
+	 * 	   ^     ^     ^       ^             ^
+	 * 	maxLat minLat  maxLgn minLgn      IP
+ 	 */
+	public static ArrayList<ArrayList<Object>> parse(String configJson){
+		JSONParser parser = new JSONParser();
+		try {
+			JSONObject jsonRoot = (JSONObject) parser.parse(configJson);
+			ArrayList<ArrayList<Object>> result = new ArrayList<ArrayList<Object>> ();
+			JSONArray servers = (JSONArray) jsonRoot.get("servers");
+			for (int i=0; i<servers.size(); i++){
+				JSONObject tmpJSON = (JSONObject) servers.get(i);
+				JSONObject tmpZone = (JSONObject) tmpJSON.get("zone");
+				ArrayList<Object> tmp = new ArrayList<Object> ();
+				tmp.add(0,tmpZone.get("maxlat"));
+				tmp.add(1,tmpZone.get("minlat"));
+				tmp.add(2,tmpZone.get("maxlon"));
+				tmp.add(3,tmpZone.get("minlon"));
+				tmp.add(4,tmpJSON.get("host"));
+				result.add(tmp);
+			}
+			return result;
+		} catch (ParseException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	/**
+	 * 
+	 * @param gps un tableau [lat,lgn] contenant les coordonnées du point
+	 * @param config l'ArrayList retourné par la fonction parse
+	 * @return ArrayList contenant tout les ip des serveurs reponsables du point
+	 */
+	public static ArrayList<String> findResponsibleServer(GPS gps,ArrayList<ArrayList<Object>> config){
+		ArrayList<String> result = new ArrayList<String>();
+		for (int i=0; i<config.size(); i++){
+			ArrayList<Object> tmp = config.get(i);
+			if (gps.getLat()>Float.parseFloat(tmp.get(0).toString()) || gps.getLat()<Float.parseFloat(tmp.get(1).toString())  || 
+					gps.getLon()>Float.parseFloat(tmp.get(2).toString())  || gps.getLon()<Float.parseFloat(tmp.get(3).toString()) )
+				continue;
+			result.add(tmp.get(4).toString());
+		}
+		return result;
+	}
+
+}
