@@ -1,5 +1,3 @@
-
-<%@ page session="false"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <html>
@@ -83,13 +81,7 @@ div.app.active .text {
 
 		</form>
 	</div>
-	<div class="app">
-		<div class="text">
-			The new settings were well saved<br />(optionnal)Please restart the
-			server
-		</div>
-	</div>
-	</div>
+	
 
 	<script
 		src='http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
