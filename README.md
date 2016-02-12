@@ -80,6 +80,7 @@ You can also test with our clients that you can find in the git :
 For more detail, please read our doc under the document folder or send us a mail at sabiretude At gmail.com
 
 ### TODO:
+* Move all settings into one url*
+* Moving from mysql to Kundera (Allowing multiple databases)
 * Improve the security of communication with servers
-* Build a mechanism to stop client from DDOS
-* Add authentication when accessing */Settings* and */SetConfig*
+* Changing the logs by using log4j
