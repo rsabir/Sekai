@@ -47,7 +47,6 @@ public class InitListener implements ServletContextListener {
 
 	private boolean testMySQL(String port){
 		boolean isUp;
-		//C:\ProgramData\MySQL\MySQL Server 5.7/my.ini
 		 try {
 		        Socket socket = new Socket("127.0.0.1", Integer.valueOf(port));
 		        // Server is up
@@ -56,11 +55,9 @@ public class InitListener implements ServletContextListener {
 		    } catch (ConnectException e) {
 		    	isUp=false;
 		    }
-		    catch (IOException e)
-		    {
+		    catch (IOException e){
 		        // Server is down
 		    	isUp=false;
-		    	
 		    }
 		return isUp;
 	}

@@ -135,7 +135,7 @@
 			    minZoom:1
 			});
 			map.fitBounds(bounds);
-			L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6IjZjNmRjNzk3ZmE2MTcwOTEwMGY0MzU3YjUzOWFmNWZhIn0.Y8bhBaUMqFiPrDRW9hieoQ', {
+			L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpandmbXliNDBjZWd2M2x6bDk3c2ZtOTkifQ._QA7i5Mpkd_m30IGElHziw', {
 				maxZoom: 18,
 				id: 'mapbox.streets'
 			}).addTo(map);
@@ -161,7 +161,7 @@
 		
 		divNoClient = $("div#noclient");
 		
-		$("#mapContainer").append('<div id="search" class="">'+
+		$("#mapContainer").append('<div id="search_client" class="">'+
 		'<div class="container_icon"><i class="fa fa-search"></i></div>'+
 		'<input placeholder="Search for client" id="input_client"/>'+
 		'</div>');
@@ -202,10 +202,10 @@
 	        // optional (if other layers overlap autocomplete list)
 	        open: function(event, ui) {
 	            $(".ui-autocomplete").css("z-index", 1000);
-	            $("#search").addClass("extend");
+	            $("#search_client").addClass("extend");
 	        },
 	        close:function(event,ui){
-	        	 $("#search").removeClass("extend");
+	        	 $("#search_client").removeClass("extend");
 	        }
 	    }).keypress(function(e) {
 	        if(e.which == 13) {
@@ -246,6 +246,10 @@
 		  })
 		  .trigger( "change" );
 		
+		window.li.click(function(){
+			clearInterval(timer);
+		});
+			
 		
 	});
 	

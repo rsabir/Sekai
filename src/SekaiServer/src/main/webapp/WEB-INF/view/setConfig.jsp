@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -9,18 +10,10 @@
 <script src="//cdn.tinymce.com/4/tinymce.min.js"></script>
 <script
 	src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+	<link href="<c:url value="/resources/css/jquery-linedtextarea.css" />" rel='stylesheet'
+	type='text/css' />
 <title>Set the Config</title>
 <style>
-h1 {
-	color: white;
-	text-align: center;
-	font-family: 'Open Sans', sans-serif;
-	background: black;
-	padding: 1%;
-	-moz-border-radius: 5px;
-	-webkit-border-radius: 5px;
-	border-radius: 5px;
-}
 
 textarea {
 	width: 90%;
@@ -28,18 +21,6 @@ textarea {
 	margin-left: auto;
 	margin-right: auto;
 	display: block;
-}
-
-button {
-	background: black;
-	color: white;
-	padding: 10px;
-	padding-left: 30px;
-	padding-right: 30px;
-	display: block;
-	margin-left: auto;
-	margin-right: auto;
-	margin-top: 2%;
 }
 
 #error, #success {
@@ -55,23 +36,49 @@ button {
 #success {
 	color: green;
 }
+
+
 </style>
-<!-- tags for csrf protection -->
 <sec:csrfMetaTags />
 </head>
 <body>
-	<h1>Config.json</h1>
-	<textarea></textarea>
-	<button type="button">SAVE</button>
-	<div id="error"></div>
-	<div id="success">Well saved</div>
+	<div class="row">
+		<div id="breadcrumb" class="col-md-12">
+			<ol class="breadcrumb">
+				<li><a href="index.html">index</a></li>
+				<li><a href="#">Settings</a></li>
+				<li><a href="#">Config</a></li>
+			</ol>
+		</div>
+	</div>
+	<div class="row">
+	<div class="col-xs-12 col-sm-12">
+		<div class="box">
+			<div class="box-header">
+				<div class="box-name">
+					<i class="fa fa-cog"></i>
+					<span>Config.json</span>
+				</div>>
+				<div class="no-move"></div>
+			</div>
+				<div class="box-content">
+				<h4 class="page-header">The local Config.json</h4>
+					<form class="form-horizontal" role="form">
+						<div class="text-center center-block"><textarea class="center-block" style="width:100%"></textarea></div>
+						<div class="text-center center-block" style="margin-top:1%;"><button type="button" class="btn btn-primary center-block">SAVE</button></div>
+						<div id="error"></div>
+						<div id="success">Well saved</div>
+					</form>
 	<!--   <script>tinymce.init({ 
  	  selector: 'textarea'
    });</script> -->
-	<script>
-  	$.get("/Config",function(data){
+  <script type="text/javascript" src="<c:url value='/resources/js/jquery-linedtextarea.js'/>"></script>
+  <script>
+		
+	$.get("/Config",function(data){
   		$("textarea").val(JSON.stringify(data,null,'\t'));
   	},"json");
+	 $("textarea").linedtextarea();
   	$("textarea").change(function(){
   		$("#error").hide();
   		$("#success").hide();
@@ -84,6 +91,11 @@ button {
 	$("button").click(function(){
 		try{
 			var config = $.parseJSON($("textarea").val());
+			var token = $("meta[name='_csrf']").attr("content");
+			var header = $("meta[name='_csrf_header']").attr("content");
+			$(document).ajaxSend(function(e, xhr, options) {
+					xhr.setRequestHeader(header, token);
+			});
 			$.post("SetConfig",{
 				response:$("textarea").val()
 				},function(data){
@@ -98,14 +110,5 @@ button {
 		}
 	});
   </script>
-  <script type="text/javascript">
-	$(document).ready(function(){
-		var token = $("meta[name='_csrf']").attr("content");
-		var header = $("meta[name='_csrf_header']").attr("content");
-		$(document).ajaxSend(function(e, xhr, options) {
-				xhr.setRequestHeader(header, token);
-		});
-	})
-	</script>
 </body>
 </html>

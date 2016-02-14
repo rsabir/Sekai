@@ -56,15 +56,16 @@ public class GetLatLgn extends HttpServlet {
 				jsonResponse.put("code", -1);
 			}
 	        if (jsonResponse.get("code")==null && is_error==false){
-	        	jsonResponse.put("code", 0);
-	        	jsonResponse.put("maxLat", Server.getMaxLat());
-	        	jsonResponse.put("maxLgn", Server.getMaxLgn());
-	        	jsonResponse.put("minLat", Server.getMinLat());
-	        	jsonResponse.put("minLgn", Server.getMinLgn());
+	        	jsonResponse.put("code", new Integer(0));
+	        	jsonResponse.put("maxLat", new Float(Server.getMaxLat()));
+	        	jsonResponse.put("maxLgn", new Float(Server.getMaxLgn()));
+	        	jsonResponse.put("minLat", new Float(Server.getMinLat()));
+	        	jsonResponse.put("minLgn", new Float(Server.getMinLgn()));
 	        }else if (jsonResponse.get("code")==null){
-	        	jsonResponse.put("code", -1);
+	        	jsonResponse.put("code", new Integer(-1));
 	        }
-	        
+			response.setCharacterEncoding("utf8");
+			response.setContentType("application/json");
 	        executor.shutdownNow();
 	        PrintWriter out = response.getWriter();
 			out.print(jsonResponse);

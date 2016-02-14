@@ -34,7 +34,7 @@ public class GetMap {
 
 	@RequestMapping(method = RequestMethod.GET)
 	protected String doGet(HttpServletRequest request) throws  IOException {
-		if (Urls.IP.equals("0.0.0.0")){
+		if (Urls.IP == null || Urls.IP.equals("0.0.0.0")){
 			Urls.IP = request.getLocalAddr();
 		}
 		String redirectUrl = "/getMap";

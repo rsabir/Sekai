@@ -28,6 +28,7 @@ public class Settings {
 	private static final String PARAMETER_MYSQL_PASSWORD = "password";
 	private static final String PARAMETER_MYSQL_PORT = "port";
 	private static final String PARAMETER_MYSQL_DATABASE = "database";
+	private static final String PARAMETER_IP = "ip";
 	
 	public Settings(){
 		settingFile = new File(PathsC.PATHSETTING);
@@ -37,6 +38,7 @@ public class Settings {
 		if (settingFile.exists()){
 			readSettings();
 			Urls.CONFIGSERVER = (String) settingJSON.get(PARAMETER_URL_SETTING);
+			Urls.IP = (String) settingJSON.get(PARAMETER_IP);
 			JSONObject mysqlJSON = (JSONObject) settingJSON.get(PARAMETER_MYSQL);
 			Mysql.USERNAME = (String) mysqlJSON.get(PARAMETER_MYSQL_USERNAME);
 			Mysql.PASSWORD = (String) mysqlJSON.get(PARAMETER_MYSQL_PASSWORD); 
@@ -69,6 +71,7 @@ public class Settings {
 	public static void saveFileSettings(){
 		JSONObject settingJSON = new JSONObject();
 		settingJSON.put(PARAMETER_URL_SETTING, Urls.CONFIGSERVER);
+		settingJSON.put(PARAMETER_IP, Urls.IP);
 		JSONObject mysqlJSON = new JSONObject();
 		mysqlJSON.put(PARAMETER_MYSQL_PASSWORD, Mysql.PASSWORD);
 		mysqlJSON.put(PARAMETER_MYSQL_USERNAME,Mysql.USERNAME);

@@ -14,16 +14,9 @@
 <link href="<c:url value="/resources/css/jquery-ui.theme.min.css" />" rel='stylesheet'
 	type='text/css' />
 <link href="<c:url value="/resources/css/font-awesome.min.css" />" rel='stylesheet' type='text/css'>
-<link href="<c:url value="/resources/css/animate.min.css" />" rel='stylesheet' type='text/css' />
 <style type="text/css">
 #map {
 	height: 80vh;
-}
-
-body {
-	margin: 0;
-	position: relative;
-	overflow: hidden;
 }
 
 h1 {
@@ -37,11 +30,11 @@ h1 {
 	border-radius: 5px;
 }
 
-#search.extend {
+#search_client.extend {
 	width: 300px;
 }
 
-#search {
+#search_client {
 	width: 200px;
 	background: white;
 	position: absolute;
@@ -51,7 +44,7 @@ h1 {
 	border: 1px solid #D9D9D9;
 }
 
-#search:hover {
+#search_client:hover {
 	width: 300px;
 	-moz-animation-duration: 1s;
 	-webkit-animation-duration: 1s; /* Chrome, Safari, Opera */
@@ -60,14 +53,13 @@ h1 {
 }
 
 @
-keyframes slidein {from { width:200px;
-	
-}
-
-to {
-	width: 300px;
-}
-
+keyframes slidein {
+	from { 
+		width:200px;	
+	}
+	to {
+		width: 300px;
+	}
 }
 #mapContainer {
 	position: relative;
@@ -105,7 +97,6 @@ i.fa.fa-search {
 	position: absolute;
 	top: 0px;
 	left: 0px;
-	height: 20px;
 	width: 85%;
 	padding: 10px 0px 10px 5px;
 	border: 0px none;
@@ -171,10 +162,36 @@ div#noclient #message {
 <title>The Map</title>
 </head>
 <body>
-	<h1>The Users In The Server</h1>
-	<div id="mapContainer">
-		<div id="map"></div>
+<div class="row">
+	<div id="breadcrumb" class="col-md-12">
+		<ol class="breadcrumb">
+			<li><a href="/index">Index</a></li>
+			<li><a href="#">Map</a></li>
+		</ol>
 	</div>
+</div>
+<div class="row">
+	<div class="col-xs-12">
+		<div class="box">
+			<div class="box-header">
+				<div class="box-name">
+					<i class="fa fa-map-marker"></i>
+					<span>The current users in the server</span>
+				</div>
+				<div class="box-icons">
+					<a class="expand-link">
+						<i class="fa fa-expand"></i>
+					</a>
+				</div>
+				<div class="no-move"></div>
+			</div>
+		
+			<div id="mapContainer">
+				<div id="map"></div>
+			</div>
+		</div>
+	</div>
+</div>
 	<script src="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.js"></script>
 	<script type="text/javascript" src="<c:url value='/resources/js/jquery.min.js'   />"></script>
 	<script type="text/javascript" src="<c:url value='/resources/js/jquery-ui.min.js'/>"></script>
