@@ -74,7 +74,7 @@ curl -H "Content-Type: application/json" -X POST -d '{ "client": {"ID" : "MAC_AD
 ```
 
 You can also test with our clients that you can find in the git :
->https://github.com/ZakariaHili/JOSM/
+>https://github.com/ZakariaHili/Sekai_Client
 
 ### More Details
 For more detail, please read our doc under the document folder or send us a mail at sabiretude At gmail.com
