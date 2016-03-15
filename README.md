@@ -10,7 +10,7 @@ You can find the sources and wars (bin) Sekai Client and server in google drive:
  https://drive.google.com/folderview?id=0BywXTC21h2yVa0M3UTJoUnpFZHM&usp=sharing
  
  The link to the client's github repository:
- https://github.com/ZakariaHili/JOSM
+ https://github.com/ZakariaHili/Sekai_Client
 
 ***The sekai servers are open source and are all liscenced in MIT Liscence, which means you can use it freely and without restriction. We will be very glad to receive your contribution.***
 
