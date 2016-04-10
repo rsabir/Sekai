@@ -243,11 +243,20 @@ function LoadSparkLineScript(callback){
 //
 function LoadAjaxContent(url){
 	$('.preloader').show();
+	$.post("GetConfig");
 	$.ajax({
 		mimeType: 'text/html; charset=utf-8', // ! Need set mimeType only when run from local file
 		url: url,
 		type: 'GET',
-		success: function(data) {
+		statusCode: {
+	         403: function (xhr) {
+	        	 location.reload();
+	         }
+	     },
+		success: function(data,textStatus,jqXHR) {
+			if (jqXHR.status==403){
+				location.reload();
+			}
 			$('#ajax-content').html(data);
 			$('.preloader').hide();
 		},
@@ -559,7 +568,7 @@ function SetMinBlockHeight(elem){
 //
 //  Helper for correct size of Messages page
 //
-function MessagesMenuWidth(){
+function MessagesMenuWidth (){
 	var W = window.innerWidth;
 	var W_menu = $('#sidebar-left').outerWidth();
 	var w_messages = (W-W_menu)*16.666666666666664/100;
@@ -2294,10 +2303,13 @@ function DrawFullCalendar(){
 //////////////////////////////////////////////////////
 //////////////////////////////////////////////////////
 $(document).ready(function () {
-	$('.show-sidebar').on('click', function () {
-		$('div#main').toggleClass('sidebar-show');
-		setTimeout(MessagesMenuWidth, 250);
-	});
+	setTimeout(function(){
+		$('.show-sidebar').on('click', function () {
+			$('div#main').toggleClass('sidebar-show');
+			setTimeout(MessagesMenuWidth, 250);
+		});
+	},1000);
+
 	var ajax_url = location.hash.replace(/^#/, '');
 	if (ajax_url.length < 1) {
 		var links = $("#sidebar-left ul li a");
@@ -2429,6 +2441,14 @@ $(document).ready(function () {
 					'<div class="form-group"><label class="control-label">Password</label><input type="password" class="form-control" name="password" /></div>');
 		var button = $('<div class="text-center"><a href="index.html" class="btn btn-primary">Unlock</a></div>');
 		OpenModalBox(header, form, button);
+	});
+	$( document ).ajaxComplete(function( event, xhr, settings ) {
+
+        if(xhr.status == 403){//unauthorized calls
+            // This is probably due to expired session 
+        	location.reload();
+        }
+
 	});
 });
 

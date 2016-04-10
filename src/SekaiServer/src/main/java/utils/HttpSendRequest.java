@@ -34,7 +34,6 @@ public class HttpSendRequest {
         con.setRequestMethod("GET");
         con.setRequestProperty("User-Agent", userAgent);
         int responseCode = con.getResponseCode();
-        System.out.println("GET Response Code :: " + responseCode);
         if (responseCode == HttpURLConnection.HTTP_OK) { // success
             BufferedReader in = new BufferedReader(new InputStreamReader(
                     con.getInputStream()));
@@ -46,8 +45,6 @@ public class HttpSendRequest {
             }
             in.close();
             return response.toString();
-            // print result
-            //logger.debug(response.toString());
         } else {
         	System.out.println("GET request not worked");
         	return null;
@@ -64,11 +61,6 @@ public class HttpSendRequest {
 		
 		HttpPost post = new HttpPost(url);
 		post.setHeader("User-Agent", agent);
-		//		urlParameters.add(new BasicNameValuePair("sn", "C02G8416DRJM"));
-		//			urlParameters.add(new BasicNameValuePair("cn", ""));
-		//			urlParameters.add(new BasicNameValuePair("locale", ""));
-		//			urlParameters.add(new BasicNameValuePair("caller", ""));
-		//			urlParameters.add(new BasicNameValuePair("num", "12345"));
 		post.setEntity(new StringEntity(json.toString()));
 		return sendPost(url,agent,post);
 	}

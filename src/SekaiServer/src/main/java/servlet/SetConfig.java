@@ -14,6 +14,8 @@ import javax.servlet.http.HttpServletResponse;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -29,7 +31,9 @@ import constants.PathsC;
 public class SetConfig {
 	//private static final long serialVersionUID = 1L;
 	private JSONObject responseJSON = null;
-       
+    private static Logger logger = LoggerFactory.getLogger(SetConfig.class); 
+    private static Logger httpLogger = LoggerFactory.getLogger("http");
+    
 
 	@RequestMapping(method = RequestMethod.GET)
 	protected String doGet() {
@@ -41,8 +45,11 @@ public class SetConfig {
 	@ResponseBody
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		boolean iserror=true;
-		if (request.getParameter("response")!=null){
-			String reponse = request.getParameter("response");
+		String reponse = request.getParameter("response");
+		httpLogger.info("/Start/ChangePassword was requested by "+request.getRemoteAddr()+" with account "+
+				request.getUserPrincipal().getName()+" and with the following parameter response="+reponse);
+		if (reponse!=null){
+			
 			if (isJSONValid(reponse)){
 				try {
 					FileWriter file = new FileWriter(PathsC.PATHCONFIGJSON);
@@ -51,6 +58,9 @@ public class SetConfig {
 					file.close();
 					iserror = false;
 				} catch (IOException e) {
+					logger.error("Error while requesting /Start/ChangePassword "+request.getRemoteAddr()+" with account "+
+							request.getUserPrincipal().getName()+" and with the following parameter response="+reponse);
+					logger.error(e.getMessage());
 				}
 			}
 		}

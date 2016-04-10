@@ -1,6 +1,7 @@
 package database.controller;
 
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -9,6 +10,9 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.Map;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import database.DAO.MarquerDAO;
 import database.DAO.NodeDAO;
@@ -20,6 +24,7 @@ import database.entities.User;
 
 public class DBManager {
 
+	private static Logger logger = LoggerFactory.getLogger(DBManager.class);
     private MarquerDAO marquerDAO = null;
     private UserDAO userDAO = null;
     private NodeDAO nodeDAO = null;
@@ -30,26 +35,27 @@ public class DBManager {
         marquerDAO = new MarquerDAO();
     }
     private boolean checkUser(String MAC){
+    	logger.debug("Checking if user "+MAC+" exists");
     	ArrayList<String> macList = new ArrayList<String>(userDAO.getMacAddressList());
     	if (macList!=null) {
-    	Iterator<String> iterator = macList.iterator();
-		while (iterator.hasNext()) {
-			String str=iterator.next();
-			//System.out.println(str);
-			if (str.equals(MAC)) return true;
-		}
+	    	Iterator<String> iterator = macList.iterator();
+			while (iterator.hasNext()) {
+				String str=iterator.next();
+				if (str.equals(MAC)) return true;
+			}
     	}
     	return false;
     }
 	private boolean checkNode(float longitude, float latitude) {
+		logger.debug("Checking if position "+longitude+":"+latitude+" exists");
 		ArrayList<Node> nodeList = new ArrayList<Node>(nodeDAO.getAllNodes());
 		if (nodeList!=null) {
-		Iterator<Node> iterator = nodeList.iterator();
-		while (iterator.hasNext()) {
-			Node n=iterator.next();
-			//System.out.println(n);
-    		if ((n.getLatitude()==latitude)&&(n.getLongitude()==longitude)) return true;
-    	}
+			Iterator<Node> iterator = nodeList.iterator();
+			while (iterator.hasNext()) {
+				Node n=iterator.next();
+				//System.out.println(n);
+	    		if ((n.getLatitude()==latitude)&&(n.getLongitude()==longitude)) return true;
+	    	}
 		}
 		return false;
 		
@@ -58,6 +64,9 @@ public class DBManager {
 	public boolean addData(String MAC, float longitude,float latitude){
 		int userID;
 		int nodeID;
+		
+		String string_logger = "entry user "+MAC+" with the following gps "+longitude+":"+latitude;
+		logger.debug("Adding "+string_logger );
 
 		//addUser
 		if (!checkUser(MAC)) {
@@ -66,7 +75,7 @@ public class DBManager {
 			userID = userDAO.getIDfromMAC(MAC);
 		}
 		if (userID==-1) {
-			System.out.println("User registration error");
+			logger.error("Failed while registring "+string_logger+" caused by User ID");
 			return false;
 		}
 		
@@ -77,25 +86,18 @@ public class DBManager {
 			nodeID = nodeDAO.getIDfromLonLat(longitude,latitude);
 		}
 		if (nodeID==-1) {
-			System.out.println("Node registration error");
+			logger.error("Failed while registring "+string_logger+" caused by Location");
 			return false;
 		}
 		//addMarquer
 		 DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 	     Date dateobj = new Date();
 		 return marquerDAO.addMarquer(userID, nodeID, df.format(dateobj.getTime()));
-
 	}
 
 	public LinkedList<Map<String, Comparable>> getAllData(){
+		logger.debug("Getting recent locations of all users");
 		LinkedList<Map<String, Comparable>> clientList= new LinkedList();
-		/**
-		 * pour chaque user 
-		 * chercher le marquer correspondant
-		 * cad le plus r�cent
-		 * constituer le Map
-		 * constituter la liste
-		 */
 		ArrayList<User> userList = new ArrayList<User>();
 		userList.addAll(userDAO.getUsers());
 		if (userList!=null) {
@@ -120,6 +122,7 @@ public class DBManager {
 
 	}
 	public Map getClientData(String MACID){
+		logger.debug("Gettting recent location of the user "+MACID);
 		Map client = new LinkedHashMap();
 		int userID = userDAO.getIDfromMAC(MACID);
 		if (userID==-1) return null;
@@ -134,19 +137,34 @@ public class DBManager {
 	}
 	public ArrayList<String> getMACS() {
 		// TODO Auto-generated method stub
-		
+		logger.debug("Getting ID of all users");
 		return userDAO.getMacAddressList();
 	}
+	
+	public LinkedList<Map<String, Comparable>> getClientHistory(String MAC,String date) throws ParseException {
+		logger.debug("Getting history of the client "+MAC+" at"+date);
+		LinkedList<Map<String, Comparable>> result = new LinkedList<Map<String, Comparable>>();
+		int userID = userDAO.getIDfromMAC(MAC);
+		if (userID==-1) return null;
+		ArrayList<Marquer> marquerList = marquerDAO.getMarquersGivenDay(userID, date);
+		if (marquerList!=null) {
+			Iterator<Marquer> marquerIt = marquerList.iterator();
+			while (marquerIt.hasNext()){
+				Marquer marquer = marquerIt.next();
+				Node node = nodeDAO.getNodeByID(marquer.getPosition());
+				if (node==null) return null;
+				Map<String, Comparable> client= new LinkedHashMap<String, Comparable>();
+				client.put("lat", node.getLatitude());
+				client.put("lon", node.getLongitude());
+				result.add(client);
+			}
+		return result;
+		}
+		return null;		
+	}
+	
 	public LinkedList<Map<String, Comparable>> getClientDataToday(String MAC) {
-		// TODO Auto-generated method stub
-		/*
-		 * avoir l'id a partir de la mac adresse
-		 * aller chercher les marquers de la journ�e
-		 * extraire leurs longitude latitude node id
-		 * construire les client
-		 * les renvoyer
-		 * 
-		 */
+		logger.debug("Getting the today's history of the user"+MAC);
 		LinkedList<Map<String, Comparable>> result = new LinkedList<Map<String, Comparable>>();
 		int userID = userDAO.getIDfromMAC(MAC);
 		if (userID==-1) return null;
@@ -170,7 +188,7 @@ public class DBManager {
 		return null;
 	}
 	public LinkedList< Map<String, Comparable>> getClientDataYesterday(String MAC) {
-		// TODO Auto-generated method stub
+		logger.debug("Getting the yesterday's history of the user"+MAC);
 		LinkedList<Map<String, Comparable>> result = new LinkedList<Map<String, Comparable>>();
 		int userID = userDAO.getIDfromMAC(MAC);
 		if (userID == -1) return null;

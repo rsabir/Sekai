@@ -15,6 +15,10 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -23,9 +27,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import server.Server;
 import server.ServerClient;
 import server.ServerServer;
+import server.prototype.CheckServer;
 import utils.ConfigUtils;
 import utils.PayloadUtils;
 import utils.TmpClients;
+import utils.src.UserUtils;
 import constants.Urls;
 
 import database.controller.DBManager;
@@ -39,8 +45,8 @@ import database.controller.DBManager;
 public class SendGPS{
 	//private static final Logger LOGGER = Logger.getLogger(SendGPS.class);
 	private static final long serialVersionUID = 1L;
-	private static final String PAYLOADPARAMETER = "paylaod";
-	private static final String URL = "http://localhost";
+	private static Logger logger = LoggerFactory.getLogger(SendGPS.class);
+	private static Logger httpLogger = LoggerFactory.getLogger("http");
 	private DBManager dbManager=null;
 
 	public SendGPS() {
@@ -50,16 +56,12 @@ public class SendGPS{
 	@RequestMapping(method = RequestMethod.GET)
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		Urls.IP = request.getLocalAddr();
-		response.getWriter().append("Served at: ").append(request.getContextPath());
 	}
 
 	@RequestMapping(method = RequestMethod.POST)
 	@ResponseBody
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		Urls.IP = request.getLocalAddr();
 		TmpClients.getInstance();
 		try {
 			String payloadString = "";
@@ -78,19 +80,19 @@ public class SendGPS{
 			  } catch (Exception e) { /*report an error*/ }
 			  payloadString = jb.toString();
 			
-			// String payloadString = request.getParameter(PAYLOADPARAMETER);
-			String configString = ConfigUtils.getConfig(Urls.CONFIGSERVER);
-			ArrayList<ArrayList<Object>> configList = ConfigUtils.parse(configString);
-			Server.refresh(configList);
-			// request.getAttribute(arg0)
-			PayloadUtils payload = new PayloadUtils(payloadString);
-			ArrayList<String> servers = ConfigUtils.findResponsibleServer(payload.getGps(), configList);
-			request.setCharacterEncoding("utf8");
-			response.setContentType("application/json");
-			JSONObject jsonResponse = new JSONObject();
-			if (!payload.isServer()) {
-				if (servers.size() == 1 && ServerClient.isInCharge(servers)) {
-					// TODO Verify
+			  httpLogger.debug("/SendGPS was called the following data : "+
+						payloadString+" and by the following IP="+request.getRemoteAddr());
+			  String configString = ConfigUtils.getConfig(Urls.CONFIGSERVER);
+			  ArrayList<ArrayList<Object>> configList = ConfigUtils.parse(configString);
+			  Server.refresh(configList);
+			  // request.getAttribute(arg0)
+			  PayloadUtils payload = new PayloadUtils(payloadString);
+			  ArrayList<String> serversResponsible = ConfigUtils.findResponsibleServer(payload.getGps(), configList);
+			  request.setCharacterEncoding("utf8");
+			  response.setContentType("application/json");
+			  JSONObject jsonResponse = new JSONObject();
+			  if (!payload.isServer()) {
+				if (serversResponsible.size() == 1 && ServerClient.isInCharge(serversResponsible)) {
 					if (dbManager.addData(payload.getId(), payload.getLon(), payload.getLat())){
 						TmpClients.addRecentClient(payload);
 						jsonResponse.put("code", 0);
@@ -102,34 +104,42 @@ public class SendGPS{
 					}
 					
 
-				} else if (ServerClient.isInCharge(servers)) {
+				} else if (ServerClient.isInCharge(serversResponsible)) {
 					JSONParser jsonParser = new JSONParser();
-					ServerServer.notifyAdd((JSONObject) jsonParser.parse(payloadString), servers);
+					ServerServer.notifyAdd((JSONObject) jsonParser.parse(payloadString), serversResponsible);
 					dbManager.addData(payload.getId(), payload.getLon(), payload.getLat());
 					TmpClients.addRecentClient(payload);
 					response.setStatus(HttpServletResponse.SC_OK);
 					jsonResponse.put("code", 0);
-				} else if (servers.size()>0) {
+				} else if (serversResponsible.size()>0) {
 					response.setStatus(HttpServletResponse.SC_SEE_OTHER);
 					JSONArray jsonArray = new JSONArray();
-					for (String server : servers) {
+					for (String server : serversResponsible) {
 						JSONObject tmp = new JSONObject();
 						tmp.put("IP", server);
 						jsonArray.add(tmp);
 					}
 					jsonResponse.put("servers", jsonArray);
-					if (servers.size()>0)
-						response.setHeader("Location", servers.get(0));
+					response.setHeader("Location", serversResponsible.get(0));
 
 				} else{
 					response.setStatus(HttpServletResponse.SC_NOT_FOUND);					
 				}
 			}else{
-				if (ServerClient.isInCharge(servers)) {
-					response.setStatus(HttpServletResponse.SC_OK);
-					dbManager.addData(payload.getId(), payload.getLon(), payload.getLat());
-					TmpClients.addRecentClient(payload);
-					jsonResponse.put("code", 0);
+				ArrayList<String> servers= ConfigUtils.getServers(configList);
+				ApplicationContext context =  new ClassPathXmlApplicationContext("serverBeans.xml");
+				CheckServer checkServer = (CheckServer) context.getBean("checkServer");
+				if (checkServer.isServer(payload.getIp(), servers)){
+					if (ServerClient.isInCharge(serversResponsible)) {
+						response.setStatus(HttpServletResponse.SC_OK);
+						dbManager.addData(payload.getId(), payload.getLon(), payload.getLat());
+						TmpClients.addRecentClient(payload);
+						jsonResponse.put("code", 0);
+					}
+				}else{
+					jsonResponse.put("code", -1);
+					response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+					logger.error("Bad Server Request by "+request.getRemoteAddr());
 				}
 			}
 			PrintWriter out = response.getWriter();
@@ -138,6 +148,7 @@ public class SendGPS{
 
 		} catch (ParseException e) {
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+			logger.error("Bad Request by "+request.getRemoteAddr());
 		}
 	}
 

@@ -8,12 +8,9 @@
 	href="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.css" />
 <link href='https://fonts.googleapis.com/css?family=Open+Sans'
 	rel='stylesheet' type='text/css'>
-<link href="<c:url value="/resources/css/jquery-ui.min.css" />" rel='stylesheet' type='text/css' />
-<link href="<c:url value="/resources/css/jquery-ui.structure.min.css" />" rel='stylesheet'
-	type='text/css' />
-<link href="<c:url value="/resources/css/jquery-ui.theme.min.css" />" rel='stylesheet'
-	type='text/css' />
 <link href="<c:url value="/resources/css/font-awesome.min.css" />" rel='stylesheet' type='text/css'>
+<link href="<c:url value="/resources/plugins/jquery-ui/jquery-ui.min.css" />" rel="stylesheet">
+<link rel="stylesheet" href="<c:url value="/resources/css/leaflet.awesome-markers.css"/>">
 <style type="text/css">
 #map {
 	height: 80vh;
@@ -107,10 +104,14 @@ i.fa.fa-search {
 	display: none;
 }
 
-#select {
+ #select {
+	width: 30%;
 	position: absolute;
-	bottom: 5px;
 	right: 5px;
+	bottom: 0px;
+}
+#select .form-group{
+	margin-bottom:0px;
 }
 
 div#noclient {
@@ -156,6 +157,19 @@ div#noclient #message {
 	color: white;
 	transform: translate(-50%, -50%);
 }
+#container_nb_clients{
+	position:absolute;
+	display:inline-block;
+	background:rgba(0,0,0,0.5);
+	top:0px;
+	right:0px;
+	color:white;
+	padding:2px;
+}
+
+  .awesome-marker i {
+    margin-left: 1px;
+    }
 </style>
 <!-- tags for csrf protection -->
 <sec:csrfMetaTags />
@@ -188,13 +202,20 @@ div#noclient #message {
 		
 			<div id="mapContainer">
 				<div id="map"></div>
+				<div id="noclient">
+					<div id="message">
+						<div class="text">No current client available in the server</div>
+					</div>
+				</div>
+				<div id="container_nb_clients"><span id="nb_clients">0</span> Clients</div>
 			</div>
 		</div>
 	</div>
 </div>
-	<script src="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.js"></script>
 	<script type="text/javascript" src="<c:url value='/resources/js/jquery.min.js'   />"></script>
-	<script type="text/javascript" src="<c:url value='/resources/js/jquery-ui.min.js'/>"></script>
+	<script src="<c:url value="/resources/plugins/jquery-ui/jquery-ui.min.js"/>"></script>
+<!-- 	<script src="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.js"></script> -->
+<%-- 	<script src="<c:url value='/resources/js/leaflet.awesome-markers.min.js'/>"></script> --%>
 	<script type="text/javascript" src="<c:url value='/resources/js/getMap.js'/>"></script>
 	<script type="text/javascript">
 	$(document).ready(function(){
@@ -203,13 +224,10 @@ div#noclient #message {
 		$(document).ajaxSend(function(e, xhr, options) {
 				xhr.setRequestHeader(header, token);
 		});
+		
+		
 	})
 	</script>
-	<div id="noclient">
-		<div id="message">
-			<div class="text">No current client available in the server</div>
-		</div>
-	</div>
 	<div id="error">Error in settings : The url of configuration is
 		not good</div>
 </body>

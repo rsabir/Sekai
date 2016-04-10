@@ -16,6 +16,8 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Document ;
 import org.w3c.dom.Element;
@@ -23,6 +25,7 @@ import org.w3c.dom.Node;
 import org.xml.sax.SAXException;
 
 public class SetContext {
+	private static Logger logger = LoggerFactory.getLogger(SetContext.class); 
 	String mysql_username;
 	String mysql_password;
 	String mysql_port;
@@ -37,6 +40,7 @@ public class SetContext {
 	public SetContext(){
 	}
 	private void createXML(){
+		logger.info("Creating/Updating the context.xml");
 		String path = System.getProperty("catalina.home")+File.separator+"conf"+File.separator+"context.xml";
 		
 		String contextApp = context.getRealPath("/META-INF/context.xml");
@@ -84,25 +88,13 @@ public class SetContext {
 			transformer.transform(source, result);
 			result = new StreamResult(new File(contextApp));
 			transformer.transform(source, result);
-			// Output to console for testing
-			// StreamResult result = new StreamResult(System.out);
-
-
-			System.out.println("File saved!");
+			
+			logger.info("Context was successfully modified");
 			
 			
-		} catch (ParserConfigurationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (SAXException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (TransformerException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		} catch (Exception e){
+			logger.error("Error while creating/updating context.xml");
+			logger.error(e.getMessage());
 		}
 	}
 }

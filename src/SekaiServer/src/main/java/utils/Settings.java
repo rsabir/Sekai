@@ -14,14 +14,18 @@ import org.apache.tomcat.dbcp.dbcp.BasicDataSource;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import constants.Mysql;
+import constants.Others;
 import constants.PathsC;
 import constants.Urls;
 
 public class Settings {
 	private File settingFile;
 	private JSONObject settingJSON;
+	private static Logger logger = LoggerFactory.getLogger(Settings.class);
 	private static final String PARAMETER_URL_SETTING = "server_config";
 	private static final String PARAMETER_MYSQL = "mysql";
 	private static final String PARAMETER_MYSQL_USERNAME = "username";
@@ -34,6 +38,7 @@ public class Settings {
 		settingFile = new File(PathsC.PATHSETTING);
 	}
 	public Settings init(){
+		logger.info("Loading the settings from setting.json");
 		checkDirectory();
 		if (settingFile.exists()){
 			readSettings();
@@ -44,8 +49,9 @@ public class Settings {
 			Mysql.PASSWORD = (String) mysqlJSON.get(PARAMETER_MYSQL_PASSWORD); 
 			Mysql.PORT = (String) mysqlJSON.get(PARAMETER_MYSQL_PORT);
 			Mysql.DATABASE = (String) mysqlJSON.get(PARAMETER_MYSQL_DATABASE);
-			//new SetContext(mysql_username,mysql_password,mysql_port,context);
 		}else{
+			logger.info("setting.json doesn't exist. Creating it ...");
+			Others.FIST_TIME=true;
 			saveFileSettings();
 		}
 		return this;
@@ -57,14 +63,15 @@ public class Settings {
 			settingJSON = (JSONObject) parser.parse(new FileReader(PathsC.PATHSETTING));
 
 		} catch (FileNotFoundException e) {
-			e.printStackTrace();
+			logger.error("Error occured while trying to read setting.json");
+			logger.error(e.getMessage());
 		}  catch (ParseException e) {
-			System.out.println(PathsC.PATHSETTING +" is not well formed");
-			System.out.println(e);
+			logger.error(PathsC.PATHSETTING +" is not well formed");
+			logger.error(e.getMessage());
 			System.exit(-1);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error("Error occured while trying to read setting.json");
+			logger.error(e.getMessage());
 		}
 
 	}
@@ -86,7 +93,8 @@ public class Settings {
 			file.close();
 
 		} catch (IOException e) {
-			e.printStackTrace();
+			logger.error("Error occured while saving the file setting.json");
+			logger.error(e.getMessage());
 		}
 	}
 	private void checkDirectory(){
@@ -94,15 +102,16 @@ public class Settings {
 
 		// if the directory does not exist, create it
 		if (!theDir.exists()) {
-		    System.out.println("creating directory: " + PathsC.PATHCONFIG);
+			logger.info("Creating directory: " + PathsC.PATHCONFIG);
 		    boolean result = false;
-
+		    Others.FIST_TIME=true;
 		    try{
 		        theDir.mkdir();
 		        result = true;
 		    } 
 		    catch(SecurityException se){
-		    	System.out.println("Please run the server as root");
+		    	logger.error("Error occured while creating directory: " + PathsC.PATHCONFIG);
+		    	logger.error(se.getMessage());
 				System.exit(-1);			        
 		    }
 		}

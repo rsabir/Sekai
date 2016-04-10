@@ -8,7 +8,19 @@
          id="WebApp_ID" >
 
     <display-name>SekaiServer</display-name>
-    
+ 
+  <!-- Sekai Init Listeners -->
+   <listener>
+    <listener-class>listener.InitLog</listener-class>
+  </listener>
+   <listener>
+    <listener-class>listener.InitConfig</listener-class>
+  </listener>
+  
+  <listener>
+    <listener-class>listener.InitListener</listener-class>
+  </listener>
+   
    <!--
 		- Location of the XML file that defines the root application context.
 		- Applied by ContextLoaderListener.
@@ -20,7 +32,8 @@
         /WEB-INF/security-context.xml
         </param-value>
     </context-param>
-
+  
+  
     <listener>
         <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
     </listener>
@@ -56,12 +69,6 @@
 		<url-pattern>/*</url-pattern>
 	</filter-mapping>
 	
-    <!-- Sekai Init Listeners -->
-  <listener>
-    <listener-class>listener.InitListener</listener-class>
-  </listener>
-  <listener>
-    <listener-class>listener.InitConfig</listener-class>
-  </listener>
+  
 
 </web-app>

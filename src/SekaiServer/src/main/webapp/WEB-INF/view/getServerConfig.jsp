@@ -49,18 +49,18 @@
 				<h4 class="page-header">Server Configuration</h4>
 				<form class="form-horizontal" role="form">
 						<div class="form-group">
-							<label class="col-sm-2 control-label">Ip of server</label>
+							<label class="col-sm-3 control-label">Ip:Port of the server</label>
 							<div class="col-sm-4">
 								<input type="text" id="ip" class="form-control" placeholder="Ip" data-toggle="tooltip" data-placement="Ip of the server" value ="${ip}"title="Ip Server">
 							</div>
 						</div>
 						<div class="form-group">
-							<label class="col-sm-2 control-label">Server config.json</label>
+							<label class="col-sm-3 control-label">Server config.json</label>
 							<div class="col-sm-4">
 								<input type="text" id="config" class="form-control" placeholder="URL of the Server config.json" data-toggle="tooltip" data-placement="Ip of the server" value ="${configServer}"title="Url Config.json">
 							</div>
 						</div>
-						<div class="text-center center-block" style="margin-top:1%;"><button type="button" class="btn btn-primary center-block">SAVE</button></div>
+						<div class="text-center center-block" style="margin-top:1%;"><button id="submit" type="button" class="btn btn-primary center-block">SAVE</button></div>
 						<div id="success">Well saved</div>
 				</form>						
 			</div>

@@ -25,11 +25,14 @@ import javax.sql.DataSource;
 
 import org.apache.tomcat.dbcp.dbcp.BasicDataSource;
 import org.apache.tomcat.dbcp.dbcp.SQLNestedException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.mysql.jdbc.CommunicationsException;
 import com.sun.naming.internal.ResourceManager;
 
 import constants.Mysql;
+import utils.Logs;
 import utils.Settings;
 
 /**
@@ -38,25 +41,23 @@ import utils.Settings;
  * SQLNestedException : exception rised when there is no database
  */
 public class InitListener implements ServletContextListener {
-	Connection conn = null;
+	private Connection conn = null;
+	private static Logger logger = LoggerFactory.getLogger(InitListener.class);
 	Settings settings;
 	
 	public InitListener() {
-		settings = (new Settings()).init();		
 	}
 
 	private boolean testMySQL(String port){
 		boolean isUp;
+		logger.info("Testing if the server is running under the port:"+port); 
 		 try {
 		        Socket socket = new Socket("127.0.0.1", Integer.valueOf(port));
 		        // Server is up
 		        socket.close();
 		        isUp=true;
-		    } catch (ConnectException e) {
-		    	isUp=false;
-		    }
-		    catch (IOException e){
-		        // Server is down
+		    } catch (Exception e) {
+		    	logger.error("The server is not running under the port:"+port);
 		    	isUp=false;
 		    }
 		return isUp;
@@ -64,17 +65,22 @@ public class InitListener implements ServletContextListener {
 	
 	
 	public void contextDestroyed(ServletContextEvent arg0) {
-		// TODO Auto-generated method stub
+		logger.info("Clossing the connection with the database");
 		if (conn != null) {
 			try {
 				conn.close();
 			} catch (SQLException e) {
+				logger.error("Error occured while closing the connection with the database");
+				logger.error(e.getMessage());
 			}
 		}
-		conn = null; // prevent any future access
+		conn = null; 
 	}
 
 	public void contextInitialized(ServletContextEvent event) {
+
+		settings = (new Settings()).init();
+		Logs.getInstance().load();
 		
 		if (testMySQL(Mysql.PORT)) {
 		try {
@@ -87,7 +93,9 @@ public class InitListener implements ServletContextListener {
 			database.controller.Connexion connectionTester = database.controller.Connexion.getInstance(); 
 			if (connectionTester == null){
 				Connection con =  DriverManager.getConnection("jdbc:mysql://localhost:"+Mysql.PORT+"/",Mysql.USERNAME,Mysql.PASSWORD);
-				int Result=con.createStatement().executeUpdate("CREATE DATABASE "+Mysql.DATABASE);
+				String statement = "CREATE DATABASE "+Mysql.DATABASE;
+				logger.debug(statement);
+				int Result=con.createStatement().executeUpdate(statement);
 				connectionTester = database.controller.Connexion.getInstance(); 
 			} 
 			
@@ -99,6 +107,7 @@ public class InitListener implements ServletContextListener {
 	        			    "NAME VARCHAR(30),"+
 	        			   " MACADDR VARCHAR(30) UNIQUE NOT NULL"+
 	        			");";
+	         logger.debug(createStatement);
 	         stm.executeUpdate(createStatement);
 	         createStatement =
 	        			"CREATE TABLE IF NOT EXISTS NODE ("+
@@ -106,6 +115,7 @@ public class InitListener implements ServletContextListener {
 	        			    "LONGITUDE DOUBLE NOT NULL,"+
 	        			    "LATITUDE DOUBLE NOT NULL"+
 	        			")";
+	         logger.debug(createStatement);
 	         stm.executeUpdate(createStatement);
 	         createStatement =
 	        			"CREATE TABLE IF NOT EXISTS MARQUER ("+
@@ -114,23 +124,22 @@ public class InitListener implements ServletContextListener {
 	        			    "DATEOFADD TIMESTAMP NOT NULL,"+
 	        			    "PRIMARY KEY (USERID , NODEID, DATEOFADD)"+
 	        			")";
+	         logger.debug(createStatement);
 	         stm.executeUpdate(createStatement);
 		} catch (CommunicationsException e) {
-			System.err.println("!!! : Nothing running on port "+Mysql.PORT+" or MySQL is stopped, please provide the correct port on configuration file");
+			logger.error("!!! : Nothing running on port "+Mysql.PORT+" or MySQL is stopped, please provide the correct port on configuration file");
 			System.exit(1);
-
-			//chercher ou est mysql et changer la configuration du port
 		
 		}catch (SQLException e) {
-			//create shema dans la base de donn�es
-			System.err.println("!!! : Please check your configuration for mysql and data sources (username,password,port)");
+			logger.error("!!! : Please check your configuration for mysql and data sources (username,password,port)");
+			logger.error(e.getMessage());
 			System.exit(1);
 		} catch (ClassNotFoundException e) {
-			System.err.println("!!! : Error while loading the driver of mysql");
-			e.printStackTrace();
+			logger.error("!!! : Error while loading the driver of mysql");
+			logger.error(e.getMessage());
 		}
 		} else {
-			System.err.println("!!! : MySQL is not running on port "+Mysql.PORT+", please provide the port on configuration file");
+			logger.error("!!! : The database server is not running on port "+Mysql.PORT+", please provide the port on configuration file");
 			System.exit(1);
 		}
 

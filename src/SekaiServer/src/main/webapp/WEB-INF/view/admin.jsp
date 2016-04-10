@@ -55,7 +55,10 @@
 	<div class="container-fluid expanded-panel">
 		<div class="row">
 			<div id="logo" class="col-xs-12 col-sm-12">
-				<a href="index" id="realLogo"class="col-xs-12 col-sm-10">Sekai</a>
+				<a href="#" class="show-sidebar" style="margin-left: 10px;margin-right: 10px;color:white;outline: none;">
+					<i class="fa fa-bars"></i>
+				</a>
+				<a href="index" id="realLogo"class="col-xs-12 col-sm-9">Sekai</a>
 				<a href="logout" class="col-xs-2 col-sm-2"><i class="fa fa-sign-out"style="margin-right:5px;"></i>Sign out</a>
 			</div>
 		</div>
@@ -84,6 +87,18 @@
 						<li><a class="ajax-link" href="ServerConfig">Server Configuration</a></li>
 						<li><a class="ajax-link" href="DatabaseConfig">Database Configuration</a></li>
 						<li><a class="ajax-link" href="UserConfig">User Configuration</a></li>
+					</ul>
+				</li>
+				<li class="dropdown">
+					<a href="#" class="dropdown-toggle">
+						<i class="fa fa-file"></i>
+						<span class="hidden-xs">Logs</span>
+					</a>
+					<ul class="dropdown-menu">
+						<li><a class="ajax-link" href="getGeneralLog">All Logs</a></li>
+						<li><a class="ajax-link" href="getHttpLog">Http Logs</a></li>
+						<li><a class="ajax-link" href="getErrorLog">Error Logs</a></li>
+						<li><a class="ajax-link" href="getLogSetting">Configure</a></li>
 					</ul>
 				</li>
 				<li>
@@ -115,11 +130,25 @@
 <script src="<c:url value="/resources/plugins/tinymce/jquery.tinymce.min.js"/>"></script>
 <!-- All functions for this theme + document.ready processing -->
 <script src="<c:url value="/resources/js/devoops.js"/>"></script>
-<script src="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.js"></script>
-<%-- 	<script type="text/javascript" src="<c:url value='/resources/js/jquery.min.js'   />"></script> --%>
+
+ <script src="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.js"></script> 
+<script src="<c:url value='/resources/js/leaflet.awesome-markers.min.js'/>"></script> 
+
+<!-- <script src="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.js"></script> -->
+<%--  	<script type="text/javascript" src="<c:url value='/resources/js/jquery.min.js'   />"></script> --%> 
+<%--  	<script src="<c:url value="/resources/plugins/jquery-ui/jquery-ui.min.js"/>"></script>  --%>
+<%--  	<script type="text/javascript" src="<c:url value='/resources/js/getMap.js'/>"></script>  --%>
+<%-- 	<script type="text/javascript" src="<c:url value='/resources/js/jquery.min.js'   />"></script> --%> 
 <%-- 	<script type="text/javascript" src="<c:url value='/resources/js/jquery-ui.min.js'/>"></script> --%>
+
+
 <script>
 	window.li = $(".nav li .ajax-link");
+	li.click(function(e){
+		var element = $(e.target);
+		$("head title").html(element.text());
+	});
+	
 </script>
 </body>
 </html>

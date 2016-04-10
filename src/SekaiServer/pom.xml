@@ -91,13 +91,18 @@
 			<version>${slf4j.version}</version>
 			<scope>compile</scope>
 		</dependency>
+<!-- 		<dependency>  -->
+<!-- 		  <groupId>org.slf4j</groupId> -->
+<!-- 		  <artifactId>slf4j-log4j12</artifactId> -->
+<!-- 		  <version>1.7.18</version> -->
+<!-- 		</dependency> -->
 		<dependency>
 			<groupId>ch.qos.logback</groupId>
 			<artifactId>logback-classic</artifactId>
 			<version>${logback.version}</version>
 			<scope>runtime</scope>
 		</dependency>
-
+ 
 		<!-- Hibernate -->
 		<dependency>
 			<groupId>org.hibernate</groupId>

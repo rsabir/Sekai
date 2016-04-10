@@ -10,6 +10,10 @@ import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.sql.DataSource;
 
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import constants.Mysql;
 
 public class Connexion {
@@ -18,13 +22,13 @@ public class Connexion {
 		//private Statement statement = null;
 	private static Context context = null;
 	private static DataSource datasource = null;
+	private static Logger logger = LoggerFactory.getLogger(Connection.class);
 
 	 private Connexion() throws SQLException{
 		 super();
 		 // Get the context and create a connection
 		connection = DriverManager.getConnection("jdbc:mysql://localhost:"+Mysql.PORT+"/"+Mysql.DATABASE,Mysql.USERNAME,Mysql.PASSWORD);
-		System.out.println("Connexion a la base de donn�e de "
-					+ " effectu�e avec succ�s");
+		logger.info("Connection To Database succeded");
 	 }
 
 public final static Connexion getInstance() {
@@ -54,8 +58,8 @@ public ResultSet query(String request) {
       	Statement statement = connection.createStatement();
           resultat = statement.executeQuery(request);
       } catch (SQLException e) {
-          e.printStackTrace();
-          System.out.println("Erreur dans la requete : " + request);
+          logger.error("Error while doing the request : " + request);
+          logger.error(e.getMessage());
           return null;
       }
      // close();
@@ -68,8 +72,8 @@ public boolean update(String request) {
     	Statement statement = connection.createStatement();
         statement.executeUpdate(request);
     } catch (SQLException e) {
-       // e.printStackTrace();
-        System.out.println("Erreur dans la requete : " + request);
+        logger.error("Error while doing the request : " + request);
+        logger.error(e.getMessage());
         return false;
     }
     

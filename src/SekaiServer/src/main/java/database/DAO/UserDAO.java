@@ -4,6 +4,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import database.controller.Connexion;
 import database.entities.User;
 
@@ -13,25 +16,29 @@ import database.entities.User;
  */
 public class UserDAO {
     
-    public UserDAO(){
-    }
-
+	private static Logger logger = LoggerFactory.getLogger(UserDAO.class);
+    
     public ArrayList<String> getMacAddressList(){
+    	String messageDebug = "etting ID of all users"; 
+    	logger.debug("G"+messageDebug);
 		ArrayList<String> result = new ArrayList<String>();
-			ResultSet rs =  Connexion.getInstance().query("select MACADDR from USER");
-			if (rs != null) {
-				try {
-					while (rs.next()) {
-						String macAddr = rs.getString("MACADDR");
-						result.add(macAddr);
-					}
-				} catch (SQLException e) {
-					e.printStackTrace();
-					return null;
+		String statement = "select MACADDR from USER";
+		logger.info(statement);
+		ResultSet rs =  Connexion.getInstance().query(statement);
+		if (rs != null) {
+			try {
+				while (rs.next()) {
+					String macAddr = rs.getString("MACADDR");
+					result.add(macAddr);
 				}
-				return result;
-			} else
+			} catch (SQLException e) {
+				logger.error("Error while g"+messageDebug);
+				logger.error(e.getMessage());
 				return null;
+			}
+			return result;
+		} else
+			return null;
     }
 
 	/**
@@ -41,27 +48,28 @@ public class UserDAO {
 	 * @return userID if success, -1 if failure
 	 */
     public int getIDfromMAC(String MAC){
-    	String selectStatement=new String();
-		 selectStatement="select ID from USER where MACADDR = \""+MAC+"\"";
-		 ResultSet resultSet = Connexion.getInstance().query(selectStatement);
-		 if (resultSet!=null) {
-		 try {
-			 resultSet.next();
-	         int userID= resultSet.getInt("ID");	
-	         return  userID;
-		  } catch (SQLException e) {
-	          e.printStackTrace();
-	      }
-		 }
-		  return -1;
+    	String messageDebug = "etting id database of user from it's ID="+MAC;
+    	logger.debug("G"+messageDebug);
+    	String selectStatement="select ID from USER where MACADDR = \""+MAC+"\"";
+    	logger.info(selectStatement);
+		ResultSet resultSet = Connexion.getInstance().query(selectStatement);
+		if (resultSet!=null) {
+			try {
+				resultSet.next();
+		        int userID= resultSet.getInt("ID");	
+		        return  userID;
+			} catch (SQLException e) {
+				logger.error("Error while g"+messageDebug);
+				logger.error(e.getMessage());
+		    }
+		}
+		return -1;
     }
     
     public int addUser(String MAC, String name) {
 		
-		//verify the MAC address
-		MAC.replace("-", ":");
-		//if (!utils.DB.verifyMacAddr(MAC)) return -1;
-		//prepare the insertion statement
+		logger.debug("Adding the user with the name="+name+" and id="+MAC);
+    	//prepare the insertion statement
 		String insertStatement = new String();
 		if (name == null) {
 			insertStatement = "INSERT INTO USER(MACADDR)\n" + "Values (\""
@@ -70,6 +78,7 @@ public class UserDAO {
 			insertStatement = "INSERT INTO USER(NAME,MACADDR)\n" + "Values (\""
 					+ name + "\",\"" + MAC + "\");";
 		}
+		logger.info(insertStatement);
 		// execute the statement
 		if ( Connexion.getInstance().update(insertStatement))
 			// return the user ID
@@ -78,9 +87,12 @@ public class UserDAO {
 			return -1;
 	}
     public ArrayList<User> getUsers(){
+    	String messageDebug = "etting all users from database";
+    	logger.debug("G"+messageDebug);
     	String selectStatement=new String();
     	ArrayList<User> list= new ArrayList<User>();
 		 selectStatement="select ID, MACADDR, NAME from USER;";
+		 logger.info(selectStatement);
 		 ResultSet resultSet = Connexion.getInstance().query(selectStatement);
 		 if (resultSet!=null) {
 		 try {
@@ -92,11 +104,11 @@ public class UserDAO {
 	         list.add(new User(userID, NAME, MACADDR));
 			 }
 		  } catch (SQLException e) {
-	          e.printStackTrace();
+	          logger.error("Error while g"+messageDebug);
+			  logger.error(e.getMessage());
 	          return null;
 	      }
 		 }
-		 // System.out.println(list);
     	return list;
     }
 }

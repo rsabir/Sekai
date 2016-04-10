@@ -10,6 +10,7 @@
   	<http pattern="/Config" security="none"/>
     <http auto-config="true" >
         <intercept-url pattern="/ADMIN/*" access="hasRole('ADMIN')" />
+        <intercept-url pattern="/Start/*" access="hasRole('ADMIN')" />
         <csrf disabled="false"/>
         <form-login 
 		    login-page="/login" 

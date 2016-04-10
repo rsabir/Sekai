@@ -17,6 +17,8 @@ import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import constants.Urls;
 
@@ -29,6 +31,8 @@ import database.controller.DBManager;
 @WebServlet("/ADMIN/GetHistory")
 public class GetHistory extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+	private static Logger logger = LoggerFactory.getLogger(GetHistory.class);
+	private static Logger httpLogger = LoggerFactory.getLogger("http");
 	 private DBManager dbManager= null;  
        
     /**
@@ -44,8 +48,6 @@ public class GetHistory extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		response.getWriter().append("Served at: ").append(request.getContextPath());
 	}
 
 	/**
@@ -57,32 +59,21 @@ public class GetHistory extends HttpServlet {
 		request.setCharacterEncoding("utf8");
 		response.setContentType("application/json");
 		String client = request.getParameter("client");
-		int optionChoosed = Integer.parseInt(request.getParameter("optionSelected"));
+		String date = request.getParameter("date");
+		httpLogger.info("/Start/GetHistory was requested by "+request.getRemoteAddr()+" with account "+
+				request.getUserPrincipal().getName()+" and with the following parameter client="+client
+				+" date="+date);
 		LinkedList<Map<String, Comparable>> clientList= null;
-		if (optionChoosed==0){
-			// his position right now (is not used/never sent)
-		}else if (optionChoosed==1){
-			// his position of today
-			clientList = new LinkedList<Map<String, Comparable>>(dbManager.getClientDataToday(client));
-			if (clientList==null);
-			/*for (int i=0;i<100;i++){
-				LinkedHashMap<String, Comparable> client2 = new LinkedHashMap<String, Comparable>();
-				client2.put("lat",40.74173+i*0.001);
-				client2.put("lgn",-74.22569+i*0.001);
-				clientList.add(client2);
-			}*/
-		}else{
-			// his position of yesterday
-			clientList = new LinkedList<Map<String, Comparable>>(dbManager.getClientDataYesterday(client));
-			if (clientList==null);
-			/*for (int i=0;i<100;i++){
-			LinkedHashMap<String, Comparable> client2 = new LinkedHashMap<String, Comparable>();
-			client2.put("lat",40.74173+i*0.0001);
-			client2.put("lgn",-74.22569+i*0.0001);
-			clientList.add(client2);
-			}*/
+		
+		try {
+			clientList = new LinkedList<Map<String, Comparable>>(dbManager.getClientHistory(client,date));
+		} catch (java.text.ParseException e1) {
+			logger.error("Error while requesting /Start/GetHistory by "+request.getRemoteAddr()+" with account "+
+					request.getUserPrincipal().getName()+" and with the following parameter client="+client
+					+" date="+date);
+			logger.error(e1.getMessage());
 		}
-		//TODO get from the database the latlng of the day
+		
 		Map<String, Serializable> obj=new LinkedHashMap<String, Serializable>();
 		obj.put("code",new Integer(0));
 		obj.put("history",clientList);
@@ -90,8 +81,10 @@ public class GetHistory extends HttpServlet {
 		try {
 			jsonResponse = (JSONObject) jsonParser.parse(jsonText);
 		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error("Error while requesting /Start/GetHistory by "+request.getRemoteAddr()+" with account "+
+					request.getUserPrincipal().getName()+" and with the following parameter client="+client
+					+" date="+date);
+			logger.error(e.getMessage());
 		}
 		PrintWriter out = response.getWriter();
 		out.print(jsonResponse);

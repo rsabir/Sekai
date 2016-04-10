@@ -20,6 +20,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.json.simple.JSONObject;
 import org.json.simple.parser.ParseException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import server.Server;
 import utils.ConfigUtils;
@@ -30,45 +32,50 @@ import utils.ConfigUtils;
 @WebServlet("/ADMIN/GetLatLgn")
 public class GetLatLgn extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+	private static Logger logger = LoggerFactory.getLogger(GetLatLgn.class);
+	private static Logger httpLogger = LoggerFactory.getLogger("http");
     private boolean is_error = false;   
     /**
      * @see HttpServlet#HttpServlet()
      */
     public GetLatLgn() {
         super();
-        // TODO Auto-generated constructor stub
     }
 
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-	      ExecutorService executor = Executors.newSingleThreadExecutor();
-	      JSONObject jsonResponse = new JSONObject();
-	      Future<String> future = executor.submit(new Task());
-	      is_error=false;
-
-	        try {
-	            executor.invokeAll(Arrays.asList(new Task()), 6, TimeUnit.SECONDS); // Timeout of 10 minutes.
-	        } catch (InterruptedException e) {
-				e.printStackTrace();
-				future.cancel(true);
-				jsonResponse.put("code", -1);
-			}
-	        if (jsonResponse.get("code")==null && is_error==false){
-	        	jsonResponse.put("code", new Integer(0));
-	        	jsonResponse.put("maxLat", new Float(Server.getMaxLat()));
-	        	jsonResponse.put("maxLgn", new Float(Server.getMaxLgn()));
-	        	jsonResponse.put("minLat", new Float(Server.getMinLat()));
-	        	jsonResponse.put("minLgn", new Float(Server.getMinLgn()));
-	        }else if (jsonResponse.get("code")==null){
-	        	jsonResponse.put("code", new Integer(-1));
-	        }
-			response.setCharacterEncoding("utf8");
-			response.setContentType("application/json");
-	        executor.shutdownNow();
-	        PrintWriter out = response.getWriter();
-			out.print(jsonResponse);
+		httpLogger.info("/Start/GetLatLgn was requested by "+request.getRemoteAddr()+" with account "+
+				request.getUserPrincipal().getName());
+		ExecutorService executor = Executors.newSingleThreadExecutor();
+	    JSONObject jsonResponse = new JSONObject();
+	    Future<String> future = executor.submit(new Task());
+	    is_error=false;
+	    
+	    try {
+	          executor.invokeAll(Arrays.asList(new Task()), 6, TimeUnit.SECONDS); // Timeout of 10 minutes.
+	    } catch (InterruptedException e) {
+	    	logger.error("Error occured while requesting /Start/GetLatLgn by "+request.getRemoteAddr()+" with account "+
+					request.getUserPrincipal().getName());
+	    	logger.error(e.getMessage());
+	    	future.cancel(true);
+	    	jsonResponse.put("code", -1);
+	    }
+	    if (jsonResponse.get("code")==null && is_error==false){
+	    	jsonResponse.put("code", new Integer(0));
+	    	jsonResponse.put("maxLat", new Float(Server.getMaxLat()));
+	    	jsonResponse.put("maxLgn", new Float(Server.getMaxLgn()));
+	    	jsonResponse.put("minLat", new Float(Server.getMinLat()));
+	    	jsonResponse.put("minLgn", new Float(Server.getMinLgn()));
+	    }else if (jsonResponse.get("code")==null){
+	    	jsonResponse.put("code", new Integer(-1));
+	    }
+	    response.setCharacterEncoding("utf8");
+	    response.setContentType("application/json");
+	    executor.shutdownNow();
+	    PrintWriter out = response.getWriter();
+	    out.print(jsonResponse);
 	    }
 
 	class Task implements Callable<String> {
@@ -79,12 +86,13 @@ public class GetLatLgn extends HttpServlet {
 				ArrayList<ArrayList<Object>> configList = ConfigUtils.parse(configString);
 				Server.refresh(configList);		
 			} catch (ParseException e) {
-				e.printStackTrace();
+				logger.error("Error occured while requesting /Start/GetLatLgn");
+		    	logger.error(e.getMessage());
 				is_error=true;
 				return "error";
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				logger.error("Error occured while requesting /Start/GetLatLgn");
+		    	logger.error(e.getMessage());
 				is_error=true;
 				return "error";
 			}

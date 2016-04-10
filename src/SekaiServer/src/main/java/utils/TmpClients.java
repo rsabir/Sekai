@@ -9,6 +9,9 @@ import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import database.controller.Connexion;
 
 /**
@@ -21,6 +24,7 @@ public class TmpClients {
 	private static Hashtable<String,Client> memory;
 	private static ArrayList<String> clients;
 	private static TmpClients instance;
+	private static Logger logger = LoggerFactory.getLogger(TmpClients.class);
 	private static int RECENT_INTERVAL_SECONDS = 20000;
 	
 	private TmpClients(){
@@ -39,6 +43,7 @@ public class TmpClients {
 	}
 	
 	public static ArrayList<Client> getRecentClients(){
+		logger.debug("Getting the last client saved in the temporary memory");
 		long now = (new Date()).getTime();
 		ArrayList<Client> resultList = new ArrayList<Client>();
 		Iterator<String> it = clients.iterator();
@@ -57,6 +62,7 @@ public class TmpClients {
 	}
 	
 	public static LinkedList<Map<String, Object>> getRecentClientsList(){
+		logger.debug("Getting the list of recent clients from the temporary memory");
 		LinkedList<Map<String, Object>> result = new LinkedList<Map<String, Object>> ();
 		Iterator<Client> it = getRecentClients().iterator();
 		while (it.hasNext()){
@@ -75,6 +81,7 @@ public class TmpClients {
 	}
 	
 	public static Map<String, Object> getRecentClientList(String id){
+		logger.debug("Getting the list of recent clients from the temporary memory");
 		Client client = getRecentClient(id);
 		Map clientMap = new LinkedHashMap();
 		if (client == null)
@@ -87,6 +94,7 @@ public class TmpClients {
 	}
 	
 	public static void addRecentClient(PayloadUtils payload){
+		logger.debug("Adding a new client in the temporary memory : "+payload.toString());
 		addRecentClient(new Client(payload.getId(),payload.getLat(),payload.getLon(),new Date()));
 	}
 	
@@ -102,6 +110,7 @@ public class TmpClients {
 	}
 	
 	public static void clean(){
+		logger.debug("Cleaning the temporary memory");
 		TmpClients.memory=new Hashtable<String,Client>();
 		TmpClients.clients = new ArrayList<String>();
 	}

@@ -15,6 +15,8 @@ import javax.servlet.http.HttpServletResponse;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import constants.PathsC;
 import constants.Urls;
@@ -25,6 +27,8 @@ import constants.Urls;
 @WebServlet("/Config")
 public class Config extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+	private static Logger logger = LoggerFactory.getLogger(Config.class);
+	private static Logger httpLogger = LoggerFactory.getLogger("http");
        
     /**
      * @see HttpServlet#HttpServlet()
@@ -38,46 +42,11 @@ public class Config extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
 		String path = PathsC.PATHCONFIGJSON;
 		String jsonString = readFile( path ); 
-		//"{\"servers\":["+
-//	             "{"+
-//	                "\"zone\":{"+
-//	                       "\"maxlat\": 44.8448769,"+
-//	                       "\"minlat\": 44.8305549,"+
-//	                      " \"maxlon\": -0.5275520000000142,"+
-//	                       "\"minlon\": -0.6563579999999547"+
-//	                "},"+
-//	                "\"host\":\"172.20.0.43\""+
-//	             "},{"+
-//		             "\"zone\":{"+
-//		                 "\"maxlat\": 44.8448769,"+
-//		                 "\"minlat\": 44.8305549,"+
-//		                " \"maxlon\": -0.6,"+
-//		                 "\"minlon\": -0.7"+
-//                 	"},"+
-//                 	"\"host\":\"172.20.0.45\""+
-//	                "},{"+
-//	                "\"zone\":{"+
-//	                 "\"maxlat\": 44.9448769,"+
-//	                 "\"minlat\": 44.8448769,"+
-//	                " \"maxlon\": -0.6,"+
-//	                 "\"minlon\": -0.7"+
-//            	"},"+
-//            		"\"host\":\"172.20.0.46\""+
-//            		"},{"+
-//	                "\"zone\":{"+
-//	                 "\"maxlat\": 44.9448769,"+
-//	                 "\"minlat\": 44.8448769,"+
-//	                " \"maxlon\": -0.7,"+
-//	                 "\"minlon\": -0.8"+
-//            	"},"+
-//            		"\"host\":\"172.20.0.47\""+
-//	             "}]}";
-//		
 		JSONParser jsonParser = new JSONParser();
 		JSONObject jsonResponse;
+		httpLogger.debug("/Config was requested by "+request.getRemoteAddr());
 		try {
 			jsonResponse = (JSONObject) jsonParser.parse(jsonString);
 			request.setCharacterEncoding("utf8");
@@ -85,7 +54,8 @@ public class Config extends HttpServlet {
 			PrintWriter out = response.getWriter();
 			out.print(jsonResponse);
 		} catch (ParseException e) {
-			// TODO Auto-generated catch block
+			logger.error("Error happened while requesting /Config");
+			logger.error(e.getMessage());
 			e.printStackTrace();
 		}
 		
@@ -95,12 +65,12 @@ public class Config extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
 		doGet(request, response);
 	}
 	
 	private static String readFile(String filename) {
 	    String result = "";
+	    logger.debug("Reading the file "+filename);
 	    try {
 	        BufferedReader br = new BufferedReader(new FileReader(filename));
 	        StringBuilder sb = new StringBuilder();
@@ -111,7 +81,8 @@ public class Config extends HttpServlet {
 	        }
 	        result = sb.toString();
 	    } catch(Exception e) {
-	        e.printStackTrace();
+	    	logger.error("Error occured while reading the file "+filename);
+	    	logger.error(e.getMessage());
 	    }
 	    return result;
 	}

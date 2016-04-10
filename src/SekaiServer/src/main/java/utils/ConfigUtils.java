@@ -2,26 +2,38 @@ package utils;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.scheduling.annotation.SchedulingConfiguration;
 
 import constants.Urls;
 
 public class ConfigUtils {
 	
+	private static String configString; 
+	private static long lastTimeGotten = 0;
+	private final static long INTERVAL_UPDATE = 5000;
+	private static Logger logger = LoggerFactory.getLogger(ConfigUtils.class);
+	
 	public static String getConfig() throws ParseException, IOException{
 		return getConfig(Urls.CONFIGSERVER);
 	}
-	public static String getConfig(String url) throws ParseException, IOException{	
-		String response = HttpSendRequest.sendGET(url);
-		return response;
-		
-		// TestConfigUtils.before();
-		// return TestConfigUtils.jsonString;
+	public static String getConfig(String url) throws ParseException, IOException{
+		long now = (new Date()).getTime();
+		if ( now - lastTimeGotten > ConfigUtils.INTERVAL_UPDATE){
+			logger.debug("Getting the config from"+url);
+			configString = HttpSendRequest.sendGET(url);
+			lastTimeGotten = now;
+		}
+		return configString;	
 	}
+	
 	/**
 	 * 
 	 * @param configJson le configuration en json mode string  
@@ -31,6 +43,7 @@ public class ConfigUtils {
 	 * 	maxLat minLat  maxLgn minLgn      IP
  	 */
 	public static ArrayList<ArrayList<Object>> parse(String configJson){
+		logger.debug("Parsing the config : "+configJson);
 		JSONParser parser = new JSONParser();
 		try {
 			JSONObject jsonRoot = (JSONObject) parser.parse(configJson);
@@ -49,7 +62,8 @@ public class ConfigUtils {
 			}
 			return result;
 		} catch (ParseException e) {
-			e.printStackTrace();
+			logger.error("Error occured while parsing the config"+configJson);
+			logger.error(e.getMessage());
 			return null;
 		}
 	}
@@ -70,5 +84,15 @@ public class ConfigUtils {
 		}
 		return result;
 	}
+	
+	public static ArrayList<String> getServers(ArrayList<ArrayList<Object>> config){
+		ArrayList<String> result = new ArrayList<String>();
+		for (int i=0; i<config.size(); i++){
+			ArrayList<Object> tmp = config.get(i);
+			result.add(tmp.get(4).toString());
+		}
+		return result;
+	}
+	
 
 }

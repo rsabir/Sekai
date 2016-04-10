@@ -16,6 +16,8 @@ import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import constants.Urls;
 
@@ -29,6 +31,8 @@ import utils.TmpClients;
 @WebServlet("/ADMIN/GetClients")
 public class GetClients extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+	private static Logger logger = LoggerFactory.getLogger(GetClients.class);
+	private static Logger httpLogger = LoggerFactory.getLogger("http");
     private DBManager dbManager= null;  
     /**
      * @see HttpServlet#HttpServlet()
@@ -43,8 +47,6 @@ public class GetClients extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		response.getWriter().append("Served at: ").append(request.getContextPath());
 	}
 
 	/**
@@ -60,14 +62,15 @@ public class GetClients extends HttpServlet {
 		try {
 			jsonResponse = (JSONObject) jsonParser.parse(jsonText);
 		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error("Error occured while requesting");
 		}
 		PrintWriter out = response.getWriter();
 		out.print(jsonResponse);
 		
 	}
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		httpLogger.info("/Start/GetClients was requested by "+request.getRemoteAddr()+" with account "+
+				request.getUserPrincipal().getName());
 		TmpClients.getInstance();
 		JSONObject jsonResponse = new JSONObject();
 		JSONParser jsonParser = new JSONParser();
@@ -77,29 +80,23 @@ public class GetClients extends HttpServlet {
 		LinkedList<Map<String, Object>> clientList=
 			new LinkedList();
 		if (all.equals("1")){
-			//clientList=dbManager.getAllData();
 			clientList = TmpClients.getRecentClientsList();
 			if (clientList==null)
 				returnError(jsonResponse, jsonParser, response); //
 		}else{
 			String client= request.getParameter("client");
-			clientList=new LinkedList<Map<String, Object>>();
-			//clientList.add(dbManager.getClientData(client));
-			clientList.add(TmpClients.getRecentClientList(client));
-			//System.out.println(clientList);
-			if (clientList==null)
-				returnError(jsonResponse, jsonParser, response); //; 
+			Map<String, Object> lastClient = TmpClients.getRecentClientList(client);
+			if (lastClient!=null)
+				clientList.add(lastClient);
 		}
 		Map obj=new LinkedHashMap();
 		obj.put("code",new Integer(0));
 		obj.put("clients",clientList);
-		//System.out.println("client"+clientList);
 		String jsonText = JSONValue.toJSONString(obj);
 		try {
 			jsonResponse = (JSONObject) jsonParser.parse(jsonText);
 		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			
 		}
 		PrintWriter out = response.getWriter();
 		out.print(jsonResponse);
