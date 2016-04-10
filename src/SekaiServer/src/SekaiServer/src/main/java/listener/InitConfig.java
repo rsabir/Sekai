@@ -74,7 +74,7 @@ public class InitConfig implements ServletContextListener {
 				Files.copy(tmpPathP,p,REPLACE_EXISTING );
 			} catch (IOException e) {
 				System.out.println("Please run the server as root ! ");
-				System.exit(-1);	
+				//System.exit(-1);	
 			}
 		}
 		Path pathUsers = Paths.get(PathsC.PATHUSERS);

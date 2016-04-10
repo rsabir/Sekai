@@ -76,7 +76,7 @@ public class InitListener implements ServletContextListener {
 
 	public void contextInitialized(ServletContextEvent event) {
 		
-		if (testMySQL(Mysql.PORT)) {
+		/*if (testMySQL(Mysql.PORT)) {
 		try {
 			 final String JDBC_DRIVER = "com.mysql.jdbc.Driver"; 
 			Class.forName(JDBC_DRIVER);
@@ -132,7 +132,7 @@ public class InitListener implements ServletContextListener {
 		} else {
 			System.err.println("!!! : MySQL is not running on port "+Mysql.PORT+", please provide the port on configuration file");
 			System.exit(1);
-		}
+		}*/
 
 	}
 }
